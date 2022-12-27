@@ -1,0 +1,17 @@
+FileVersion = 1
+
+[Project]
+Name = "CInterop"
+StartupObject = "CInterop.Program"
+
+[Configs.Debug.Win64]
+LibPaths = ["$(ProjectDir)/zig-out/lib/CInterop.lib"]
+
+[Configs.Release.Win64]
+LibPaths = ["$(ProjectDir)/zig-out/lib/CInterop.lib"]
+
+[Configs.Paranoid.Win64]
+LibPaths = ["$(ProjectDir)/zig-out/lib/CInterop.lib"]
+
+[Configs.Test.Win64]
+LibPaths = ["$(ProjectDir)/zig-out/lib/CInterop.lib"]
