@@ -1,13 +1,13 @@
 FileVersion = 1
 LastConfig = "Debug"
 LastPlatform = "Win64"
-RecentFilesList = ["CInterop\\src\\main.zig", "CInterop\\src\\Program.bf", "HelloWorld\\src\\Program.bf"]
+RecentFilesList = ["CInterop\\src\\main.zig", "VectorMath\\src\\Program.bf", "CInterop\\src\\Program.bf", "HelloWorld\\src\\Program.bf"]
 
 [MainWindow]
-X = 375
-Y = 77
-Width = 1169
-Height = 877
+X = 382
+Y = 76
+Width = 1156
+Height = 867
 ShowKind = "Maximized"
 
 [MainDockingFrame]
@@ -29,7 +29,7 @@ Type = "TabbedView"
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 Active = true
 TabLabel = "Workspace"
-TabWidth = 115.0
+TabWidth = 111.6
 Type = "ProjectPanel"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets]]
@@ -43,15 +43,23 @@ Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Program.bf"
-TabWidth = 96.0
+TabWidth = 102.4
+Type = "SourceViewPanel"
+FilePath = "VectorMath\\src\\Program.bf"
+CursorPos = 36
+ProjectName = "VectorMath"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "Program.bf"
+TabWidth = 92.4
 Type = "SourceViewPanel"
 FilePath = "CInterop\\src\\Program.bf"
-CursorPos = 175
+CursorPos = 219
 ProjectName = "CInterop"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Program.bf"
-TabWidth = 96.0
+TabWidth = 92.4
 Type = "SourceViewPanel"
 FilePath = "HelloWorld\\src\\Program.bf"
 CursorPos = 125
@@ -72,25 +80,25 @@ Type = "TabbedView"
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 Active = true
 TabLabel = "Errors"
-TabWidth = 86.0
+TabWidth = 83.6
 Type = "ErrorsPanel"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Memory"
-TabWidth = 99.0
+TabWidth = 97.2
 Type = "MemoryPanel"
 AutoResize = "Auto_Mul8"
 RequestedWidth = 300.0
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Watch"
-TabWidth = 86.0
+TabWidth = 85.2
 Type = "WatchPanel"
 Columns = [{Width = 200.0}, {Width = 200.0}, {Width = 200.0}]
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Auto"
-TabWidth = 77.0
+TabWidth = 76.4
 Type = "AutoWatchPanel"
 Columns = [{Width = 200.0}, {Width = 200.0}, {Width = 200.0}]
 
@@ -102,23 +110,23 @@ Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Threads"
-TabWidth = 97.0
+TabWidth = 94.0
 Type = "ThreadPanel"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Call Stack"
-TabWidth = 105.0
+TabWidth = 103.6
 Type = "CallStackPanel"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Immediate"
-TabWidth = 111.0
+TabWidth = 109.2
 Type = "ImmediatePanel"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 Active = true
 TabLabel = "Output"
-TabWidth = 90.0
+TabWidth = 89.2
 Type = "OutputPanel"
 
 [[BookmarkFolders]]

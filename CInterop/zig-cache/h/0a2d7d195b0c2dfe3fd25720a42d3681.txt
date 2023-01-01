@@ -1,0 +1,1 @@
+35154 281474980665851 1667490892017688600 1ba9a3868c2db4bd8dc7bc0e9d5e1bac D:\zig\lib\libc\mingw\lib-common\kernel32.def.in
