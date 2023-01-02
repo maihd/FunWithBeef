@@ -7,9 +7,9 @@ Delegate and lambdas
 
 Orthodox C++:
 ```c++
-struct DeferDelete
+struct DeferDelete<T>
 {
-    void* memoryToDelete;
+    T* memoryToDelete;
     // Maybe need allocator field
 
     DeferDelete(memory)
@@ -20,14 +20,15 @@ struct DeferDelete
     ~DeferDelete()
     {
         delete memoryToDelete;
-        // C++ cannot pass allocator, show maybe allocator->free base on memory system
+        // C++ delete cannot pass allocator (weird syntax: operator delete(memory allocator))
+        // So you need call destructor (memory->~T()), later allocator->free base on your memory system
     }
 
 };
 
-const auto memory = new int(10));
+const auto memory = new int(10);
 const auto lambda = [memory](){
-    DeferDelete deferDelete(memory); // C++ does not have destructor block like Beef
+    DeferMemory<int> deferDelete(memory); // C++ does not have destructor block like Beef
 
     // Work here
 };
