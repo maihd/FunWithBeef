@@ -1,7 +1,7 @@
 FileVersion = 1
 LastConfig = "Debug"
 LastPlatform = "Win64"
-RecentFilesList = ["CInterop\\src\\main.zig", "VectorMath\\src\\Program.bf", "CInterop\\src\\Program.bf", "HelloWorld\\src\\Program.bf"]
+RecentFilesList = ["VectorMath\\src\\Program.bf", "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\Console.bf", "VectorMath\\src\\Vector2.bf", "CInterop\\src\\Program.bf", "HelloWorld\\src\\Program.bf", "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\IFormattable.bf", "CInterop\\src\\main.zig"]
 
 [MainWindow]
 X = 382
@@ -42,11 +42,37 @@ DefaultDocumentsTabbedView = true
 Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "Console.bf"
+TabWidth = 98.4
+Type = "SourceViewPanel"
+FilePath = "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\Console.bf"
+CursorPos = 6953
+VertPos = 4332.0
+ProjectName = "corlib"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "IFormattable.bf"
+TabWidth = 124.0
+Type = "SourceViewPanel"
+FilePath = "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\IFormattable.bf"
+CursorPos = 30
+ProjectName = "corlib"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "Vector2.bf"
+TabWidth = 96.0
+Type = "SourceViewPanel"
+FilePath = "VectorMath\\src\\Vector2.bf"
+CursorPos = 59
+ProjectName = "VectorMath"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+Active = true
 TabLabel = "Program.bf"
-TabWidth = 102.4
+TabWidth = 92.4
 Type = "SourceViewPanel"
 FilePath = "VectorMath\\src\\Program.bf"
-CursorPos = 36
+CursorPos = 584
 ProjectName = "VectorMath"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
