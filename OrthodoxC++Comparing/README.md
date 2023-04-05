@@ -1,9 +1,10 @@
 Orthodox C++ vs Beef Comparing
 ------------------------------
+
 I found [Orthodox C++](https://gist.github.com/bkaradzic/2e39896bc7d8c34e042b) and [Beef](https://www.beeflang.org/) are very similar.
 
-Delegate and lambdas
---------------------
+Delegates and lambdas
+---------------------
 
 Orthodox C++:
 ```c++
@@ -28,7 +29,8 @@ struct DeferDelete<T>
 
 const auto memory = new int(10);
 const auto lambda = [memory](){
-    DeferMemory<int> deferDelete(memory); // C++ does not have destructor block like Beef
+    // Hacks: C++ does not have lambda's destructor block like Beef
+    DeferDelete<int> deferDelete(memory);
 
     // Work here
 };
