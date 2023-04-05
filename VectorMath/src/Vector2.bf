@@ -38,7 +38,7 @@ public struct Vector2
 		return .(lhs.x / rhs.x, lhs.y / rhs.y);
 	}
 
-	/* Crashing on 0.43.4
+	/* Crashing on 0.43.4, CANNOT BUILD ON BEEF NIGHTLY 4/5/2023
 	[Intrinsic("add")]
 	public static extern Self operator+(Self lhs, Self rhs);
 
