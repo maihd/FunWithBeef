@@ -1,0 +1,29 @@
+FileVersion = 1
+
+[Project]
+Name = "CppInterop"
+StartupObject = "CppInterop.Program"
+
+[Configs.Debug.Win32]
+LibPaths = ["$(ProjectDir)/CppLib/Debug/CppLib.lib"]
+
+[Configs.Debug.Win64]
+LibPaths = ["$(ProjectDir)/CppLib/x64/Debug/CppLib.lib"]
+
+[Configs.Release.Win32]
+LibPaths = ["CppLib/x64/Debug/CppLib.lib"]
+
+[Configs.Release.Win64]
+LibPaths = ["CppLib/x64/Release/CppLib.lib"]
+
+[Configs.Paranoid.Win32]
+LibPaths = ["CppLib/Debug/CppLib.lib"]
+
+[Configs.Paranoid.Win64]
+LibPaths = ["CppInterop/x64/Debug/CppLib.lib"]
+
+[Configs.Test.Win32]
+LibPaths = ["CppLib/Debug/CppLib.lib"]
+
+[Configs.Test.Win64]
+LibPaths = ["CppInterop/x64/Debug/CppLib.lib"]

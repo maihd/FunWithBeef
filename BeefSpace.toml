@@ -1,5 +1,5 @@
 FileVersion = 1
-Projects = {HelloWorld = {Path = "HelloWorld"}, CInterop = {Path = "CInterop"}, VectorMath = {Path = "VectorMath"}}
+Projects = {HelloWorld = {Path = "HelloWorld"}, CInterop = {Path = "CInterop"}, VectorMath = {Path = "VectorMath"}, CppInterop = {Path = "CppInterop"}}
 
 [Workspace]
-StartupProject = "VectorMath"
+StartupProject = "CppInterop"
