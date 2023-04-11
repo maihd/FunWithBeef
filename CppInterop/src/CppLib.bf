@@ -8,6 +8,8 @@ public static class CppLib
 	public static extern void Intro();
 }
 
+// Below code cannot compiled:
+/*
 [CRepr]
 public struct HelloClass
 {
@@ -25,3 +27,4 @@ public struct HelloClass
 	[LinkName(.CPP)]
 	public extern void ShowMessage();
 }
+*/

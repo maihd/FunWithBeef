@@ -4,4 +4,10 @@
 zig-out
 zig-cache
 
+*.user
 BeefSpace_User.toml
+
+.vs
+x64
+Debug
+Release
