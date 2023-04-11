@@ -12,6 +12,30 @@ enum JsonValue
 	case Array(List<JsonValue> array);
 	case Object(Dictionary<String, JsonValue>);
 
+	public StringView TypeName()
+	{
+		switch (this)
+		{
+		case Null:
+			return "JsonNull";
+
+		case Number:
+			return "JsonNumber";
+
+		case Boolean:
+			return "JsonBoolean";
+
+		case String:
+			return "JsonString";
+
+		case Array:
+			return "JsonArray";
+
+		case Object:
+			return "JsonObject";
+		}
+	}
+
 	public void ToString(String buffer)
 	{
 		switch (this)
