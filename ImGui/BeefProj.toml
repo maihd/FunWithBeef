@@ -1,0 +1,6 @@
+FileVersion = 1
+Dependencies = {corlib = "*", SDL2 = "*", ImGui = "*", ImGuiImplOpenGL3 = "*", ImGuiImplSDL = "*"}
+
+[Project]
+Name = "ImGuiExample"
+StartupObject = "ImGuiExample.Program"

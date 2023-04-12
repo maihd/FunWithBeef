@@ -5,24 +5,51 @@ using ImGui;
 using OpenGL;
 using System;
 
+[AlwaysInclude]
 class Program
 {
     static void Main()
     {
         SDL.Init(.Video);
+		defer SDL.Quit();
+
 		let window = SDL.CreateWindow("ImGui Example", .Centered, .Centered, 800, 600, .Shown | .OpenGL);
-		SDL.SetWindowBordered(window, true);
+		if (window == null)
+		{
+			Console.Error.WriteLine("Error: Failed to create display window!");
+			return;
+		}
+		defer
+		{
+			SDL.DestroyWindow(window);
+		}
 
 		let context = SDL.GL_CreateContext(window);
+		if (context == 0)
+		{
+			Console.Error.WriteLine("Error: Failed to create OpenGL context!");
+			return;
+		}
+		defer
+		{
+			SDL.GL_DeleteContext(context);
+		}
+
 		SDL.SDL_GL_MakeCurrent(window, context);
-		GL.LoadProcs((name) => SDL.SDL_GL_GetProcAddress(name.Ptr));
+		if (GL.LoadProcs((name) => SDL.SDL_GL_GetProcAddress(name.Ptr)) case .Err)
+		{
+			Console.Error.WriteLine("Error: Failed to load OpenGL functions!");
+			return;
+		}
 
 		ImGui.CreateContext();
+		defer ImGui.DestroyContext();
 
 		ImGuiImplSDL2.InitForOpenGL(window, BitConverter.Convert<decltype(context), void*>(context));
-		SDL.SetWindowBordered(window, true);
+		defer ImGuiImplSDL2.Shutdown();
 
 		ImGuiImplOpenGL3.Init();
+		defer ImGuiImplOpenGL3.Shutdown();
 
 		bool done = false;
 		while (!done)
@@ -51,15 +78,7 @@ class Program
 			ImGui.Render();
 			ImGuiImplOpenGL3.RenderDrawData(ImGui.GetDrawData());
 			
-			SDL.SetWindowBordered(window, true);
 			SDL.GL_SwapWindow(window);
 		}
-
-		ImGuiImplOpenGL3.Shutdown();
-		ImGuiImplSDL2.Shutdown();
-		ImGui.DestroyContext();
-
-		SDL.DestroyWindow(window);
-		SDL.Quit();
     }
 }
