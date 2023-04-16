@@ -1,0 +1,10 @@
+FileVersion = 1
+Projects = {BeefProject = {Path = "."}, raylib-beef = "*"}
+
+[Workspace]
+StartupProject = "BeefProject"
+
+[Configs.Debug.wasm32]
+AllocType = "CRT"
+EnableObjectDebugFlags = false
+EmitObjectAccessCheck = false
