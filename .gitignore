@@ -1,6 +1,9 @@
 /build
 /recovery
 
+build
+recovery
+
 zig-out
 zig-cache
 
