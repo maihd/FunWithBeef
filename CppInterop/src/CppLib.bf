@@ -1,4 +1,5 @@
 using System;
+using System.Interop;
 
 public static class CppLib
 {
@@ -8,23 +9,41 @@ public static class CppLib
 	public static extern void Intro();
 }
 
-// Below code cannot compiled:
-/*
 [CRepr]
-public struct HelloClass
+public class HelloClass : Object
 {
-	public char8* message = null;
+	public c_char* message = null;
+	
+	// Below code cannot compiled:
+	//[LinkName("HelloClass::Create")]
+	//[LinkName(.CPP)]
+	//public static extern HelloClass Create();
+
+	//[LinkName("HelloClass::Destroy")]
+	//[LinkName(.CPP)]
+	//public static extern void Destroy(HelloClass helloClass);
 
 	[LinkName(.CPP)]
-	public static extern HelloClass* Create();
+	public extern void SetMessage([MangleConst] c_char* message);
 
+	//[LinkName("HelloClass::SayHi")]
 	[LinkName(.CPP)]
-	public static extern void Destroy(HelloClass* helloClass);
+	public extern virtual void SayHi();
 
+	//[LinkName("HelloClass::ShowMessage")]
 	[LinkName(.CPP)]
-	public extern void SayHi();
-
-	[LinkName(.CPP)]
-	public extern void ShowMessage();
+	public extern virtual void ShowMessage();
 }
-*/
+
+public class SubHelloClass : HelloClass
+{
+	public override void SayHi()
+	{
+		Console.WriteLine("SubHelloClass say hi");
+	}
+
+	public override void ShowMessage()
+	{
+		Console.WriteLine("Message from HelloClass: {0}", message == null ? StringView("(null)") : StringView(message));
+	}
+}

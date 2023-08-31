@@ -5,6 +5,7 @@
 #include "framework.h"
 
 #include <stdio.h>
+#include <stdint.h>
 
 class CppLib
 {
@@ -16,18 +17,24 @@ public:
     }
 };
 
-class HelloClass
+struct __declspec(dllexport) HelloClass
 {
-public:
-    const char* message;
+public: // bf::Object fields
+    int mClassVData;
+    int mDbgAllocInfo;
 
 public:
-    static HelloClass* Create()
+    const char* message = nullptr;
+
+public:
+    static HelloClass* Create(void)
     {
         printf("Hello from HelloClass constructor\n");
         
         auto helloClass = new HelloClass();
         helloClass->message = "An secret message";
+
+        return helloClass;
     }
     
     static void Destroy(HelloClass* helloClass)
@@ -37,12 +44,18 @@ public:
     }
 
 public:
-    void SayHi()
+    void SetMessage(const char* message)
+    {
+        this->message = message;
+    }
+
+public:
+    virtual void SayHi()
     {
         printf("HelloClass say hi\n");
     }
 
-    void ShowMessage()
+    virtual void ShowMessage()
     {
         printf("Message from HelloClass: %s\n", message);
     }
