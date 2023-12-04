@@ -55,6 +55,14 @@ public class Program
 				b.x, b.y, b.z, b.w,
 				e.x, e.y, e.z, e.w);
 		}
+
+		TestSSE:
+		{
+			// Uncomment this and we have unsolved external symbol _mm_add_ps
+			/*m128 a = default;
+			m128 b = default;
+			m128 c = SSE.add(a, b);*/
+		}
 		
 		Console.WriteLine("Press any key to close console...");
 		Console.Read();

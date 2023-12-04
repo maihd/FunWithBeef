@@ -1,0 +1,5 @@
+FileVersion = 1
+Projects = {MessageSystem = {Path = "."}}
+
+[Workspace]
+StartupProject = "MessageSystem"

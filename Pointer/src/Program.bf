@@ -19,7 +19,7 @@ public struct InplaceAlloc
     public void* Alloc(int size, int align)
     {
         return pointer;
-    }
+    } 
 
     public void* AllocTyped(Type type, int size, int align)
     {
@@ -48,10 +48,10 @@ public static class Program
 {
 	public static void Main()
 	{
-		void* dataPtr = Internal.StdMalloc(sizeof(Data));
+		/*void* dataPtr = Internal.StdMalloc(sizeof(Data));
 		defer Internal.StdFree(dataPtr);
 
 		Data data = PointerCast.Cast<Data>(dataPtr);
-		data.Hello();
+		data.Hello();*/
 	}
 }
