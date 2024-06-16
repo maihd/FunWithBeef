@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
+
 class CppLib
 {
 public:
@@ -17,11 +18,15 @@ public:
     }
 };
 
+
 struct __declspec(dllexport) HelloClass
 {
-public: // bf::Object fields
+public: // bf::Object fields (required to C++ class interop and inheritance in Beef)
     int mClassVData;
+
+#if !defined(NDEBUG) || !NDEBUG
     int mDbgAllocInfo;
+#endif
 
 public:
     const char* message = nullptr;
@@ -61,6 +66,7 @@ public:
     }
 };
 
+
 extern "C" void cIntro()
 {
     printf("Hello from C\n");
@@ -69,3 +75,5 @@ extern "C" void cIntro()
     HelloClass helloClass;
     helloClass.ShowMessage();
 }
+
+//! EOF

@@ -2,6 +2,22 @@ namespace CppInterop;
 
 using System;
 
+
+[AlwaysInclude]
+class SubHelloClass : HelloClass
+{
+	public override void SayHi()
+	{
+		Console.WriteLine("SubHelloClass say hi");
+	}
+
+	public override void ShowMessage()
+	{
+		Console.WriteLine("Message from HelloClass: {0}", message == null ? StringView("(null)") : StringView(message));
+	}
+}
+
+
 class Program
 {
 	[CLink]
@@ -10,6 +26,7 @@ class Program
 	public static void Main()
 	{
 		defer Console.Read();
+		
 
 		Console.WriteLine("Demo C++ Interop");
 
@@ -24,6 +41,7 @@ class Program
 		let helloClass = HelloClass.Create();
 		defer HelloClass.Destroy(helloClass);
 		*/
+
 		
 		let helloClass = new HelloClass();
 		defer delete helloClass;
@@ -42,6 +60,7 @@ class Program
 		helloClass.SetMessage("BeefLang is Fun!");
 		helloClass.ShowMessage();
 		
+
 		let subHelloClass = new SubHelloClass();
 		defer delete subHelloClass;
 		

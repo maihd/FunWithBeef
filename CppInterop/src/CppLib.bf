@@ -1,6 +1,8 @@
 using System;
 using System.Interop;
 
+
+[AlwaysInclude]
 public static class CppLib
 {
 	//?Intro@CppLib@@YAXXZ
@@ -9,8 +11,9 @@ public static class CppLib
 	public static extern void Intro();
 }
 
-[CRepr]
-public class HelloClass : Object
+
+[CRepr, AlwaysInclude]
+public class HelloClass
 {
 	public c_char* message = null;
 	
@@ -33,17 +36,4 @@ public class HelloClass : Object
 	//[LinkName("HelloClass::ShowMessage")]
 	[LinkName(.CPP)]
 	public extern virtual void ShowMessage();
-}
-
-public class SubHelloClass : HelloClass
-{
-	public override void SayHi()
-	{
-		Console.WriteLine("SubHelloClass say hi");
-	}
-
-	public override void ShowMessage()
-	{
-		Console.WriteLine("Message from HelloClass: {0}", message == null ? StringView("(null)") : StringView(message));
-	}
 }
