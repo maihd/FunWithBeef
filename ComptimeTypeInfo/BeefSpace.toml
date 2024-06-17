@@ -1,0 +1,5 @@
+FileVersion = 1
+Projects = {ComptimeTypeInfo = {Path = "."}}
+
+[Workspace]
+StartupProject = "ComptimeTypeInfo"
