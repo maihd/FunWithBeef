@@ -53,7 +53,7 @@ lambda();
 Beef:
 ```beef
 let memory = new:allocator int(10);
-let lambda = [=memory]()
+let lambda = [=memory]() =>
 {
     // Work here
 }
