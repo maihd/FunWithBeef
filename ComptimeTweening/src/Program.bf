@@ -139,8 +139,8 @@ class Program
 
 			// Generation tween function
 			let code = scope String();
-			code.Append("V startValue = ?;\n"); // WARNING: BF0168: The variable 'startValue' is assigned but its value is never used
-												// Dont how to remove this warnings
+			code.Append("#unwarn\n");
+			code.Append("V startValue = ?;\n");
 			for (let fieldV in typeV.GetFields())
 			{
 				let fieldName = fieldV.Name;
