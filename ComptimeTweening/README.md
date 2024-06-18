@@ -1,0 +1,16 @@
+# Advantage of BeefLang when do tweening
+- C#-like reflection
+- No reflection overhead
+- Generate tween function for each fields of target type
+- Tuple for per fields tweening
+- Safety typing:
+    - Checking if target type is a reference type (class, pointer)
+    - Make sure target type have all fields needed
+- Limited:
+    - No `Type.GetProperty()`
+    - Property need to get through `get__{propertyName}`, `set__{propertyName}`
+    - `Type.GetMethod() != .Ok(.NoResults)` cause compiler internal error
+    - Cannot find anonymous fields
+    - Check may cause compiling progress slow-down
+    - All pointer typeof is resulting `void*`. Need use `if (type.IsPointer) type = type.UnderlyingType;`. But only needed when checking fields.
+- Find out more details in [Program.bf](/src/Program.bf)

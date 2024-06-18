@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Collections;
 
 namespace ComptimeTypeInfo;
@@ -9,10 +10,36 @@ class Program
 	public static void PrintTypeInfo<T>()
 	{
 		Type type = typeof(T);
+        if (type.IsPointer)
+        {
+            type = type.UnderlyingType;
+        }
+
 		String name = type.GetName(..scope String());
 		Compiler.MixinRoot(scope $"""
 			System.Console.WriteLine($"typeof(T) = {name}");
 		""");
+
+        for (let field in type.GetFields())
+        {
+            Compiler.MixinRoot(scope $"""
+            	System.Console.WriteLine($"{name} has field: {field.Name}");
+            """);
+        }
+
+        for (let method in type.GetMethods())
+        {
+            Compiler.MixinRoot(scope $"""
+            	System.Console.WriteLine($"{name} has method: {method.Name}");
+            """);
+
+            if (method.Name == "get__x")
+            {
+                Compiler.MixinRoot(scope $"""
+                	System.Console.WriteLine($"{name} has properties x");
+                """);
+            }
+        }
 	}
 
 	public function void TweenFunc<T, V>(T target, V value, float time);
@@ -30,7 +57,7 @@ class Program
 		[Comptime]
 		public static void GenTweenFunc<T, V>()
 		{
-			let typeT = typeof(T);
+			var typeT = typeof(T);
 			let typeV = typeof(V);
 
 			let nameT = typeT.GetFullName(..scope String());
@@ -43,23 +70,65 @@ class Program
 			}
 		
 			// T must has all fields of V
-			for (let fieldV in typeV.GetFields())
-			{
-				var found = false;
-				for (let fieldT in typeT.GetFields())
-				{
-					if (fieldV.Name == fieldT.Name)
-					{
-						found = true;
-						break;
-					}
-				}
+            const let checkFields = false;
+            if (checkFields)
+            {
+                if (typeT.IsPointer)
+                {
+                    typeT = typeT.UnderlyingType;
+                }
 
-				if (!found)
-				{
-					Runtime.FatalError(scope $"{nameT} does not contains all fields of {nameV}");
-				}
-			}
+    			for (let fieldV in typeV.GetFields())
+    			{
+                    var found = false;
+
+                    for (let fieldT in typeT.GetFields())
+                    {
+                        if (fieldT.Name == fieldV.Name)
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        var foundGetter = false;
+                        var foundSetter = false;
+
+                        let getterName = scope $"get__{fieldV.Name}";
+                        let setterName = scope $"set__{fieldV.Name}";
+                        for (let methodT in typeT.GetMethods())
+                        {
+                            if (methodT.Name == getterName)
+                            {
+                                foundGetter = true;
+                            }
+
+                            if (methodT.Name == setterName)
+                            {
+                                foundSetter = true;
+                            }
+
+                            if (foundGetter && foundSetter)
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        /*This code cause CmpEq error
+                        found = typeT.GetMethod(scope $"get__{fieldV.Name}") != .Err(.NoResults) &&
+							    typeT.GetMethod(scope $"set__{fieldV.Name}") != .Err(.NoResults);
+                        */
+                    }
+    
+    				if (!found)
+    				{
+    					Runtime.FatalError(scope $"{nameT} does not contains all fields/properties of {nameV}. Requiring \"{fieldV.Name}\".");
+    				}
+    			}
+            }
 
 			// Generation tween function
 			let code = scope String(10 * 1024);
@@ -129,10 +198,20 @@ class Program
 		return runner;
 	}
 
+    struct Vector2
+    {
+        public float x;
+        public float y;
+    }
+    
 	class Entity
 	{
-		public float x;
-		public float y;
+        using public Vector2 position;
+        // Reflection cannot find fields "x", "y"
+		//public Vector2 position;
+
+        //public float x { get => position.x; set => position.x = value; }
+        //public float y { get => position.y; set => position.y = value; }
 	}
 
 	public static int Main(String[] args)
@@ -143,25 +222,40 @@ class Program
 			Console.Read();
 		}
 
-		PrintTypeInfo<StringView>();
+        PrintTypeInfo<Vector2>();
+        PrintTypeInfo<Vector2*>();
+        PrintTypeInfo<Entity>();
+		//PrintTypeInfo<StringView>();
 
 		Entity entity = new Entity() { x = 0.0f, y = 0.0f };
 		defer delete entity;
 
-		let runner = Tween(entity, (x: 10.0f), 1.0f, => DefEaseFunc);
-		defer delete runner;
+		let tweenerX = Tween(entity, (x: 10.0f), 1.0f, => DefEaseFunc);
+		defer delete tweenerX;
 
-		runner(1.0f);
+		tweenerX(1.0f);
 		Console.WriteLine("entity.x = {}", entity.x);
 		
-		let runnerY = Tween(entity, (y: 20.0f), 1.0f, => DefEaseFunc);
-		defer delete runnerY;
+		let tweenerY = Tween(entity, (y: 20.0f), 1.0f, => DefEaseFunc);
+		defer delete tweenerY;
 
-		runnerY(0.5f);
+		tweenerY(0.5f);
 		Console.WriteLine("entity.y = {}", entity.y);
+		
+		let tweenerPos = Tween(&entity.position, Vector2 { x = 0.0f, y = 0.0f }, 1.0f, => DefEaseFunc);
+		defer delete tweenerPos;
+
+		tweenerPos(0.5f);
+		Console.WriteLine("entity.position = ({}, {})", entity.x, entity.y);
+		
+		let tweener = Tween(entity, Vector2 { x = 0.0f, y = 0.0f }, 1.0f, => DefEaseFunc);
+		defer delete tweener;
+
+		tweener(0.5f);
+		Console.WriteLine("entity.position = ({}, {})", entity.x, entity.y);
 
 		// This will cause compile error
-		//Tween(object, (z: 0.0f), 1.0f);
+		// Tween(entity, (z: 0.0f), 1.0f, => DefEaseFunc);
 
 		return 0;
 	}
