@@ -20,7 +20,7 @@ Delegates and lambdas
 ---------------------
 
 Orthodox C++:
-```c++
+```C++
 struct DeferDelete<T>
 {
     T* memoryToDelete;
@@ -51,9 +51,9 @@ lambda();
 ```
 
 Beef:
-```beef
+```Beef
 let memory = new:allocator int(10);
-let lambda = [=memory]() =>
+let lambda = new:allocator [=memory]() =>
 {
     // Work here
 }
@@ -61,6 +61,7 @@ let lambda = [=memory]() =>
 {
     delete:allocator memory;
 };
+defer delete:allocator lambda; // lamdba is delegate, and delagate is reference type
 lambda();
 ```
 
