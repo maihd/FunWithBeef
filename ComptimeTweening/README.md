@@ -3,6 +3,10 @@
 - No reflection overhead
 - Generate tween function for each fields of target type
 - Tuple for per fields tweening
+- Syntaxes sugar for manage allocations:
+    - Lambda and delegate is memory allocation-aware
+    - `new/delete` have support allocator
+    - Code change is easy for Timer/Scheduler add custom allocator
 - Safety typing:
     - Checking if target type is a reference type (class, pointer)
     - Make sure target type have all fields needed
