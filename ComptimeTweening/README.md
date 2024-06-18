@@ -13,4 +13,4 @@
     - Cannot find anonymous fields
     - Check may cause compiling progress slow-down
     - All pointer typeof is resulting `void*`. Need use `if (type.IsPointer) type = type.UnderlyingType;`. But only needed when checking fields.
-- Find out more details in [Program.bf](/src/Program.bf)
+- Find out more details in [Program.bf](/ComptimeTweening/src/Program.bf)
