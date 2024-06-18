@@ -7,10 +7,10 @@ namespace ComptimeTypeInfo;
 class Program
 {
 	[Comptime]
-	public static void PrintTypeInfo<T>()
+	public static void PrintTypeInfo<T>(bool noUnderlyingType = true)
 	{
 		Type type = typeof(T);
-        if (type.IsPointer)
+        if (type.IsPointer && !noUnderlyingType)
         {
             type = type.UnderlyingType;
         }
@@ -58,7 +58,7 @@ class Program
 		public static void GenTweenFunc<T, V>()
 		{
 			var typeT = typeof(T);
-			let typeV = typeof(V);
+			var typeV = typeof(V);
 
 			let nameT = typeT.GetFullName(..scope String());
 			let nameV = typeV.GetFullName(..scope String());
@@ -73,10 +73,17 @@ class Program
             const let checkFields = false;
             if (checkFields)
             {
+				// Currently Beef pointer is void* only
                 if (typeT.IsPointer)
                 {
                     typeT = typeT.UnderlyingType;
                 }
+
+				// Currently Beef pointer is void* only
+				if (typeV.IsPointer)
+				{
+					typeV = typeV.UnderlyingType;
+				}
 
     			for (let fieldV in typeV.GetFields())
     			{
@@ -118,8 +125,8 @@ class Program
                         }
 
                         /*This code cause CmpEq error
-                        found = typeT.GetMethod(scope $"get__{fieldV.Name}") != .Err(.NoResults) &&
-							    typeT.GetMethod(scope $"set__{fieldV.Name}") != .Err(.NoResults);
+                        found = typeT.GetMethod(getterName) != .Err(.NoResults) &&
+							    typeT.GetMethod(setterName) != .Err(.NoResults);
                         */
                     }
     
@@ -131,21 +138,23 @@ class Program
             }
 
 			// Generation tween function
-			let code = scope String(10 * 1024);
-			code.Append("V startValue = ?;\n");
-
+			let code = scope String();
+			code.Append("V startValue = ?;\n"); // WARNING: BF0168: The variable 'startValue' is assigned but its value is never used
+												// Dont how to remove this warnings
 			for (let fieldV in typeV.GetFields())
 			{
-				code.Append(scope $"startValue.{fieldV.Name} = target.{fieldV.Name};");
+				let fieldName = fieldV.Name;
+				code.Append(scope $"startValue.{fieldName} = target.{fieldName};\n");
 			}
-			
 			code.Append("\n");
-			code.Append("TweenFuncDel<T, V> routine = new [=startValue, =easeFunc](target, value, time) =>\n");
+
+			code.Append("readonly TweenFuncDel<T, V> routine = new [=startValue, =easeFunc](target, value, time) =>\n");
 			code.Append("{\n");
 
 			for (let fieldV in typeV.GetFields())
 			{
-				code.Append(scope $"	target.{fieldV.Name} = easeFunc(startValue.{fieldV.Name}, value.{fieldV.Name}, time);\n");
+				let fieldName = fieldV.Name;
+				code.Append(scope $"	target.{fieldName} = easeFunc(startValue.{fieldName}, value.{fieldName}, time);\n");
 			}
 
 			code.Append("};");
@@ -206,8 +215,9 @@ class Program
     
 	class Entity
 	{
+		// Reflection cannot find fields "x", "y"
         using public Vector2 position;
-        // Reflection cannot find fields "x", "y"
+
 		//public Vector2 position;
 
         //public float x { get => position.x; set => position.x = value; }
@@ -222,9 +232,9 @@ class Program
 			Console.Read();
 		}
 
-        PrintTypeInfo<Vector2>();
-        PrintTypeInfo<Vector2*>();
-        PrintTypeInfo<Entity>();
+        //PrintTypeInfo<Vector2>();
+        //PrintTypeInfo<Vector2*>(noUnderlyingType: true); -> will print void*
+        //PrintTypeInfo<Entity>();
 		//PrintTypeInfo<StringView>();
 
 		Entity entity = new Entity() { x = 0.0f, y = 0.0f };
