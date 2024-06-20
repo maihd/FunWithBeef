@@ -1,0 +1,5 @@
+FileVersion = 1
+Projects = {Functional = {Path = "."}}
+
+[Workspace]
+StartupProject = "Functional"
