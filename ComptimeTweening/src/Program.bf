@@ -67,6 +67,13 @@ class Program
 			{
 				Runtime.FatalError(scope $"{nameT} must be a reference type");
 			}
+
+            // Make sure V is value type, or can be causing access violation exception
+            // Maybe check if V is ref type, and then allocation memory for startValue. But not recommended.
+            if (!typeV.IsValueType)
+            {
+                Runtime.FatalError(scope $"{nameT} must be a value type. Otherwise may cause access violation exception. No support for allocation new startValue because of performance issues.");
+            }
 		
 			// T must has all fields of V
             const let checkFields = true;
