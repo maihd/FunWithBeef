@@ -72,7 +72,8 @@ class Program
             // Maybe check if V is ref type, and then allocation memory for startValue. But not recommended.
             if (!typeV.IsValueType)
             {
-                Runtime.FatalError(scope $"{nameT} must be a value type. Otherwise may cause access violation exception. No support for allocation new startValue because of performance issues.");
+                //@note: current version of Beef (nightly) always mark typeV.IsValueType = false
+                //Runtime.FatalError(scope $"{nameV} must be a value type. Otherwise may cause access violation exception. No support for allocation new startValue because of performance issues.");
             }
 		
 			// T must has all fields of V
