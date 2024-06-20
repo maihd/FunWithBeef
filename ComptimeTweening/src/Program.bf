@@ -43,7 +43,6 @@ class Program
 	}
 
 	public function void TweenFunc<T, V>(T target, V value, float time);
-	public function float EaseFunc(float s, float e, float t);
 	public delegate void TweenFuncDel<T, V>(T target, V value, float time);
 	public delegate void TweenRunner(float dt);
 
@@ -168,7 +167,8 @@ class Program
 		public float totalTime = 0.0f;
 	}
 
-	public static TweenRunner Tween<T, V>(T target, V value, float duration, EaseFunc easeFunc, Action onDone = null)
+	public static TweenRunner Tween<T, V, TEaseFunc>(T target, V value, float duration, TEaseFunc easeFunc, Action onDone = null)
+        where TEaseFunc : delegate float(float s, float e, float t)
 	{
 		// Generate tween function with comptime features
 		TweenFuncs.GenTweenFunc<T, V>();
