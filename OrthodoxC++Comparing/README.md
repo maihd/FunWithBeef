@@ -3,6 +3,40 @@ Orthodox C++ vs Beef Comparing
 I found [Orthodox C++](https://gist.github.com/bkaradzic/2e39896bc7d8c34e042b) and [Beef](https://www.beeflang.org/) are very similar.
 
 
+Beef design goals
+-----------------
+- High performance execution
+    - No GC of ref counting overhead
+    - Minimal runtime
+    - Compiled (no JIT delays)
+- Control over memory
+    - Extensive support for custom allocators
+    - Enhanced control over stack memory
+- Low-friction interop with C and C++
+    - Statically or dynamically link to normal C/C++ libraries
+    - Support for C/C++ structure layouts and calling conventions
+- Prefer verbosity over concisements when it aides clarity, readabilitiy or discoverability
+- Enable fluid iterative development
+    - Fast incremental compilation and linking
+    - Runtime code compilation (code hot swapping), include data layout changes
+- Familiar syntax and programming paradigms for intended audience (C-family)
+- Good debugability
+    - Emits standard debug information (PDB/DWARF)
+    - Emphasis on good execution speed of debug builds
+- Well-suited to IDE-based workflow
+    - Compiler as services
+    - Fast and reliable autocomplete results
+    - Fast and trustworthy refactorability (ie: renaming symbols)
+- Leverage LLVM infrastructure
+    - Battle-hardened backend optimizer
+    - ThinLTO link time optimization support
+
+
+C++ design goals
+----------------
+Unclear. That why we have to stick to one and only one subset of C++ (on one project).
+
+
 Common features
 ---------------
 - Prefer C code that works, good C interop
