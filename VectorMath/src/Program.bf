@@ -24,6 +24,9 @@ public class Program
 
 			let e = a / b;
 			Console.WriteLine("({0}, {1}) / ({2}, {3}) = ({4}, {5})", a.x, a.y, b.x, b.y, e.x, e.y);
+
+			// test swizzle
+			Console.WriteLine("a.yx = ({0}, {1})", a.yx.x, a.yx.y);
 		}
 
 		TestVector4:

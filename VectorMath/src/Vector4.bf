@@ -4,6 +4,8 @@ using System;
 
 //typealias Vector4 = System.Numerics.float4;
 
+[Align(16)]
+[Swizzle(4)]
 public struct Vector4
 {
 	public float x;
@@ -50,7 +52,8 @@ public struct Vector4
 		return .(lhs.x / rhs.x, lhs.y / rhs.y, lhs.z / rhs.z, lhs.w / rhs.w);
 	}
 
-	/*  Crashing on 0.43.4, CANNOT BUILD ON BEEF NIGHTLY 4/4/2023
+	/* Crashing on 0.43.4, CANNOT BUILD ON BEEF NIGHTLY 4/4/2023
+	-> Beef compiler does not support intrinsic for custom type
 	[System.Intrinsic("add")]
 	public static extern Self operator+(Self lhs, Self rhs);
 	[System.Intrinsic("add"), System.Commutable]
