@@ -1,5 +1,6 @@
 FileVersion = 1
 
 [Project]
-Name = "ComptimeTypeInfo"
+Name = "ComptimeTweening"
 StartupObject = "ComptimeTypeInfo.Program"
+DefaultNamespace = "ComptimeTypeInfo"

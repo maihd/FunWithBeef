@@ -1,5 +1,5 @@
 FileVersion = 1
-Projects = {ComptimeTypeInfo = {Path = "."}}
+Projects = {ComptimeTweening = {Path = "."}}
 
 [Workspace]
-StartupProject = "ComptimeTypeInfo"
+StartupProject = "ComptimeTweening"
