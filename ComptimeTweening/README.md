@@ -13,8 +13,7 @@
 - Limited:
     - No `Type.GetProperty()`
     - Property need to get through `get__{propertyName}`, `set__{propertyName}`
-    - `Type.GetMethod() != .Ok(.NoResults)` cause compiler internal error
-    - Cannot find anonymous fields
     - Check may cause compiling progress slow-down
-    - All pointer typeof is resulting `void*`. Need use `if (type.IsPointer) type = type.UnderlyingType;`. But only needed when checking fields.
+    - All pointer typeof is resulting `void*`. Need use `if (type.IsPointer) type = type.UnderlyingType;`. 
+    - All limited are only needed when checking fields.
 - Find out more details in [Program.bf](/ComptimeTweening/src/Program.bf)

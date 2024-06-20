@@ -69,7 +69,7 @@ class Program
 			}
 		
 			// T must has all fields of V
-            const let checkFields = false;
+            const let checkFields = true;
             if (checkFields)
             {
 				// Currently Beef pointer is void* only
@@ -104,29 +104,35 @@ class Program
 
                         let getterName = scope $"get__{fieldV.Name}";
                         let setterName = scope $"set__{fieldV.Name}";
-                        for (let methodT in typeT.GetMethods())
+
+                        const let useGetMethod = true;
+                        if (!useGetMethod)
                         {
-                            if (methodT.Name == getterName)
+                            for (let methodT in typeT.GetMethods())
                             {
-                                foundGetter = true;
-                            }
-
-                            if (methodT.Name == setterName)
-                            {
-                                foundSetter = true;
-                            }
-
-                            if (foundGetter && foundSetter)
-                            {
-                                found = true;
-                                break;
+                                if (methodT.Name == getterName)
+                                {
+                                    foundGetter = true;
+                                }
+    
+                                if (methodT.Name == setterName)
+                                {
+                                    foundSetter = true;
+                                }
+    
+                                if (foundGetter && foundSetter)
+                                {
+                                    found = true;
+                                    break;
+                                }
                             }
                         }
-
-                        /*This code cause CmpEq error
-                        found = typeT.GetMethod(getterName) != .Err(.NoResults) &&
-							    typeT.GetMethod(setterName) != .Err(.NoResults);
-                        */
+                        else
+                        {
+                            foundGetter = typeT.GetMethod(getterName) case .Err(.NoResults);
+	                        foundSetter = typeT.GetMethod(setterName) case .Err(.NoResults);
+                            found = foundGetter && foundSetter;
+                        }
                     }
     
     				if (!found)
