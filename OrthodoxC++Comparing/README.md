@@ -50,6 +50,11 @@ Common features
     > As of January 14th 2022, Orthodox C++ committee approved use of C++17.
 
 
+Metaprogramming
+---------------
+In common senses, Orthodox C++ avoid complex template for metaprogramming, but use template generics for simple and neat data structure, functions are appropriated. Where the Beef generics shine. For advances metaprogramming, Beef support reflection (both rumtime and comptime), comptime eval (like constexpr, but more ergonomic), comptime codegen.
+
+
 Delegates and lambdas
 ---------------------
 
