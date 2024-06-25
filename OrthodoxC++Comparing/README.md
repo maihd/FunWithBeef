@@ -50,6 +50,11 @@ Common features
     > As of January 14th 2022, Orthodox C++ committee approved use of C++17.
 
 
+Combine Orthodox C++ with Beef
+------------------------------
+By define, Orthodox C++ are simple enough to generate bindings for other languages (just make C wrapper). But Beef can also interop with C++ name mangle. This is no brainer to claim Beef are nearly Orthodox C++. Note: Beef class will have some predefined fields (from bf::Object), so avoid inherit class from C++. 
+
+
 Variables semantic
 ------------------
 In C++, there are no different semantic of struct and class. But in Orthodox C++, we should treat struct as value, class as reference (avoid RAII in common). That are Beef behavior, but in language level. The advantage is, struct are PoDs, but can provide constructors, no copy constructor/operator that hide the works, functions, operator overloading, complicated code cognition (add features to struct does not break the PoDs semantic). Class can have constructor/destructor like C++, but no RAII, low hidden memory management flow.
