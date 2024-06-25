@@ -50,6 +50,11 @@ Common features
     > As of January 14th 2022, Orthodox C++ committee approved use of C++17.
 
 
+Variables semantic
+------------------
+In C++, there are no different semantic of struct and class. But in Orthodox C++, we should treat struct as value, class as reference (avoid RAII in common). That are Beef behavior, but in language level. The advantage is, struct are PoDs, but can provide constructors, no copy constructor/operator that hide the works, functions, operator overloading, complicated code cognition (add features to struct does not break the PoDs semantic). Class can have constructor/destructor like C++, but no RAII, low hidden memory management flow.
+
+
 Metaprogramming
 ---------------
 In common senses, Orthodox C++ avoid complex template for metaprogramming, but use template generics for simple and neat data structure, functions are appropriated. Where the Beef generics shine. For advances metaprogramming, Beef support reflection (both rumtime and comptime), comptime eval (like constexpr, but more ergonomic), comptime codegen.
