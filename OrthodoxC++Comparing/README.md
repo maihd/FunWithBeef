@@ -109,4 +109,8 @@ defer delete:allocator lambda; // lamdba is delegate, and delagate is reference 
 lambda();
 ```
 
+
+Conclusion
+----------
+Beef is Orthodox C++, but a language not subset.
 Winner: Beef is cleaner, but no different works. What Orthodox C++ can do, Beef can and with simpler ways.
