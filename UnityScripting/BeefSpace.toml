@@ -1,0 +1,5 @@
+FileVersion = 1
+Projects = {UnityScripting = {Path = "."}}
+
+[Workspace]
+StartupProject = "UnityScripting"

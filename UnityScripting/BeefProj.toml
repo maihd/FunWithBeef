@@ -1,0 +1,21 @@
+FileVersion = 1
+
+[Project]
+Name = "UnityScripting"
+TargetType = "BeefLib"
+StartupObject = "UnityScripting.Program"
+
+[Configs.Debug.Win64]
+BuildKind = "DynamicLib"
+CLibType = "Static"
+BeefLibType = "Static"
+PostBuildCmds = ["CopyFilesIfNewer(\"$(TargetDir)/$(ProjectName).dll\", \"$(ProjectDir)/Assets/Beef\")"]
+
+[Configs.Release.Win64]
+PostBuildCmds = ["CopyFilesIfNewer(\"$(TargetDir)/$(ProjectName).dll\", \"$(ProjectDir)/Assets/Beef\")"]
+
+[Configs.Paranoid.Win64]
+PostBuildCmds = ["CopyFilesIfNewer(\"$(TargetDir)/$(ProjectName).dll\", \"$(ProjectDir)/Assets/Beef\")"]
+
+[Configs.Test.Win64]
+PostBuildCmds = ["CopyFilesIfNewer(\"$(TargetDir)/$(ProjectName).dll\", \"$(ProjectDir)/Assets/Beef\")"]
