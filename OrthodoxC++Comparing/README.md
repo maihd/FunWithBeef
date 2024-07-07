@@ -52,7 +52,7 @@ Common features
 
 Combine Orthodox C++ with Beef
 ------------------------------
-By define, Orthodox C++ are simple enough to generate bindings for other languages (just make C wrapper). But Beef can also interop with C++ name mangle. This is no brainer to claim Beef are nearly Orthodox C++. Note: Beef class will have some predefined fields (from bf::Object), so avoid inherit class from C++. 
+By define, Orthodox C++ are simple enough to generate bindings for other languages (just make C wrapper). But Beef can also interop with [C++ name mangle](/CppInterop). This is no brainer to claim Beef are nearly Orthodox C++. Note: Beef class will have some predefined fields (from bf::Object), so avoid inherit class from C++. 
 
 
 Variables semantic
