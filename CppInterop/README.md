@@ -7,3 +7,4 @@
 ## Test cases
 - Interop with C++ naming mangle
 - Naming mangle cases: primitives, static function in class, struct in namespace, const mangle, reference, const reference
+- Failed handle free function wrapped in namespace, both named and anounymous

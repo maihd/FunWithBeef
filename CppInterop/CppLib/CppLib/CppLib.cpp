@@ -19,6 +19,14 @@ public:
     }
 };
 
+namespace CppLibNamespace
+{
+    void Outro(void)
+    {
+        printf("Welldone!\n");
+    }
+}
+
 namespace CStrContainer
 {
     struct CStr

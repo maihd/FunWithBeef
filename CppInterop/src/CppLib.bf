@@ -11,6 +11,12 @@ public static class CppLib
 	public static extern void Intro();
 }
 
+public static class CppLibNamespace
+{
+	[LinkName(.CPP)]
+	public static extern void Outro();
+}
+
 namespace CStrContainer
 {
 	[CRepr, AlwaysInclude]

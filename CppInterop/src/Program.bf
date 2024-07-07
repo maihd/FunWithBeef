@@ -36,6 +36,9 @@ class Program
 		Console.WriteLine("Call CppLib::Intro()");
 		CppLib.Intro();
 
+		// Beef cannot handle namespace mangle
+		//defer CppLibNamespace.Outro();
+
 		// Below code cannot compiled:
 		/*
 		let helloClass = HelloClass.Create();
