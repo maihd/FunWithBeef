@@ -11,10 +11,14 @@ public static class CppLib
 	public static extern void Intro();
 }
 
-public static class CppLibNamespace
+// This is where Beef handle C++ naming mangle
+namespace CppLibNamespace
 {
-	[LinkName(.CPP)]
-	public static extern void Outro();
+	static
+	{
+		[LinkName(.CPP)]
+		public static extern void Outro();
+	}
 }
 
 namespace CStrContainer
