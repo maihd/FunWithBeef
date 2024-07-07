@@ -2,3 +2,4 @@
 - C++ class must be have padding fields (see /CppLib/CppLib/CppLib.cpp)
 - Declare class in Beef: fields (required), extern methods
 - Now you can create subclass in Beef (see /src/Program.bf)
+- Notes: prefer C interop over C++, C is simple and have good ABI. C++ is complex and no standard ABI at all.
