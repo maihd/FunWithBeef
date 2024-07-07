@@ -11,7 +11,7 @@ public static class CppLib
 	public static extern void Intro();
 }
 
-// This is where Beef handle C++ naming mangle
+// This is where Beef failed to handle C++ naming mangle
 namespace CppLibNamespace
 {
 	static
