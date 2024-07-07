@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include <string>
 
 
 class CppLib
@@ -18,6 +19,13 @@ public:
     }
 };
 
+namespace CStrContainer
+{
+    struct CStr
+    {
+        const char* ptr;
+    };
+}
 
 struct __declspec(dllexport) HelloClass
 {
@@ -49,9 +57,14 @@ public:
     }
 
 public:
-    void SetMessage(const char* message)
+    void SetMessage(char const* message)
     {
         this->message = message;
+    }
+
+    void SetMessage(const CStrContainer::CStr& message)
+    {
+        this->message = message.ptr;
     }
 
 public:

@@ -57,7 +57,7 @@ class Program
 		helloClass.ShowMessage();
 		
 		Console.WriteLine("Call HelloClass::ShowMessage() with SetMessage(\"BeefLang is Fun!\")");
-		helloClass.SetMessage("BeefLang is Fun!");
+		helloClass.SetMessage(ref CStrContainer.CStr("BeefLang is Fun!"));
 		helloClass.ShowMessage();
 		
 

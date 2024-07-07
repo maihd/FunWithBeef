@@ -11,6 +11,20 @@ public static class CppLib
 	public static extern void Intro();
 }
 
+namespace CStrContainer
+{
+	[CRepr, AlwaysInclude]
+	public struct CStr
+	{
+		public char8* ptr;
+
+		[Inline]
+		public this(char8* ptr)
+		{
+			this.ptr = ptr;
+		}
+	}
+}
 
 [CRepr, AlwaysInclude]
 public class HelloClass
@@ -28,6 +42,9 @@ public class HelloClass
 
 	[LinkName(.CPP)]
 	public extern void SetMessage([MangleConst] c_char* message);
+
+	[LinkName(.CPP)]
+	public extern void SetMessage([MangleConst] ref CStrContainer.CStr message);
 
 	//[LinkName("HelloClass::SayHi")]
 	[LinkName(.CPP)]
