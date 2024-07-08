@@ -33,4 +33,4 @@ Meta
 ----
 Beef version: 0.43.5 nightly (>= 18/06/2024)
 Source License: No license at all, the code is just for learning/research purposes.
-Dependencies Licenses: Find its in folder is exists.
+Dependencies Licenses: Find its in folder if exists.
