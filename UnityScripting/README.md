@@ -6,3 +6,4 @@ Based on https://www.jacksondunstan.com/articles/3938.
 - Unity Native Plugins: https://docs.unity3d.com/Manual/NativePlugins.html
 - Mono Interop with Native Libraries: https://www.mono-project.com/docs/advanced/pinvoke/
 - Unity Scripting architecture: https://docs.unity3d.com/Manual/overview-of-dot-net-in-unity.html
+- C# function pointer: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-9.0/function-pointers
