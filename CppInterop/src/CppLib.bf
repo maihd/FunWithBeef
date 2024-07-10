@@ -64,3 +64,28 @@ public class HelloClass
 	[LinkName(.CPP)]
 	public extern virtual void ShowMessage();
 }
+
+[CRepr]
+public struct NativeCppClassData
+{
+    public c_char* message = null;
+}
+
+[CppClass(typeof(NativeCppClassData))]
+public class NativeCppClass
+{
+    [LinkName("NativeCppClass_Create")]
+    public static extern NativeCppClass Create();
+
+    [LinkName("NativeCppClass_Destroy")]
+    public static extern void Destroy(NativeCppClass nativeCppClass);
+
+    public c_char* message
+	{
+        get => Data.message;
+        set => Data.message = value;
+    }
+
+    [LinkName(.CPP)]
+    public extern virtual void SayHi();
+}

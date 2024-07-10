@@ -14,7 +14,7 @@ LibPaths = ["$(ProjectDir)/CppLib/x64/Debug/CppLib.lib"]
 LibPaths = ["CppLib/x64/Debug/CppLib.lib"]
 
 [Configs.Release.Win64]
-LibPaths = ["CppLib/x64/Release/CppLib.lib"]
+LibPaths = ["$(ProjectDir)/CppLib/x64/Release/CppLib.lib"]
 
 [Configs.Paranoid.Win32]
 LibPaths = ["CppLib/Debug/CppLib.lib"]

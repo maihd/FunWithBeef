@@ -88,6 +88,36 @@ public:
 };
 
 
+class __declspec(dllexport) NativeCppClass
+{
+public:
+    const char* message = nullptr;
+
+public:
+    virtual void SayHi()
+    {
+        printf("HelloClass say hi\n");
+    }
+};
+
+extern "C"
+__declspec(dllexport) NativeCppClass* NativeCppClass_Create(void)
+{
+    printf("Hello from NativeCppClass constructor\n");
+
+    auto nativeCppClass = new NativeCppClass();
+    nativeCppClass->message = "An secret message";
+
+    return nativeCppClass;
+}
+
+extern "C"
+__declspec(dllexport) void NativeCppClass_Destroy(NativeCppClass* nativeCppClass)
+{
+    printf("Goodbye from NativeCppClass destructor\n");
+    delete nativeCppClass;
+}
+
 extern "C" void cIntro()
 {
     printf("Hello from C\n");

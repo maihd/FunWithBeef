@@ -45,7 +45,16 @@ class Program
 		defer HelloClass.Destroy(helloClass);
 		*/
 
-		
+        let nativeCppClass = NativeCppClass.Create();
+        defer NativeCppClass.Destroy(nativeCppClass);
+
+        // IDE will raise exception here
+        //nativeCppClass.SayHi();
+
+        // Enable object access check IDE will raise exception
+        nativeCppClass.message = "NativeCppClass";
+        let nativeCppClassData = nativeCppClass.Data;
+
 		let helloClass = new HelloClass();
 		defer delete helloClass;
 		
