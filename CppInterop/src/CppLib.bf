@@ -86,6 +86,8 @@ public class NativeCppClass
         set => Data.message = value;
     }
 
+    //[NoShow] CppClassBuffer<NativeCppClassData> __internal_buffer;
+
     [LinkName(.CPP)]
-    public extern virtual void SayHi();
+	public extern virtual void SayHi();
 }

@@ -8,17 +8,6 @@
 #include <stdint.h>
 #include <string>
 
-
-class CppLib
-{
-public:
-    // TODO: This is an example of a library function
-    static void Intro(void)
-    {
-        printf("Hello from C++\n");
-    }
-};
-
 namespace CppLibNamespace
 {
     void Outro(void)
@@ -38,10 +27,10 @@ namespace CStrContainer
 struct __declspec(dllexport) HelloClass
 {
 public: // bf::Object fields (required to C++ class interop and inheritance in Beef)
-    int mClassVData;
+    //int mClassVData;
 
-#if !defined(NDEBUG) || !NDEBUG
-    int mDbgAllocInfo;
+#if BF_ENABLE_OBJECT_DEBUG_FLAGS || 1
+    size_t mDbgAllocInfo;
 #endif
 
 public:
@@ -96,7 +85,7 @@ public:
 public:
     virtual void SayHi()
     {
-        printf("HelloClass say hi\n");
+        printf("NativeCppClass say hi: %s\n", message);
     }
 };
 
@@ -117,6 +106,20 @@ __declspec(dllexport) void NativeCppClass_Destroy(NativeCppClass* nativeCppClass
     printf("Goodbye from NativeCppClass destructor\n");
     delete nativeCppClass;
 }
+
+
+class CppLib
+{
+public:
+    // TODO: This is an example of a library function
+    static void Intro(void)
+    {
+        printf("Hello from C++\n");
+
+        printf("NativeCppClass size: %zu\n", sizeof(NativeCppClass));
+        printf("NativeCppClass message offset: %zu\n", offsetof(NativeCppClass, message));
+    }
+};
 
 extern "C" void cIntro()
 {

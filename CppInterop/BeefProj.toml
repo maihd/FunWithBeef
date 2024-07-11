@@ -6,10 +6,7 @@ StartupObject = "CppInterop.Program"
 
 [[Project.DistinctOptions]]
 Filter = ""
-RuntimeChecks = false
-EmitDynamicCastCheck = false
 EmitObjectAccessCheck = false
-ArithmeticCheck = false
 
 [Configs.Debug.Win32]
 LibPaths = ["$(ProjectDir)/CppLib/Debug/CppLib.lib"]

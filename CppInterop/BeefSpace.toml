@@ -3,3 +3,8 @@ Projects = {CppInterop = {Path = "."}}
 
 [Workspace]
 StartupProject = "CppInterop"
+
+[Configs.Debug.Win64]
+EnableObjectDebugFlags = false
+EmitObjectAccessCheck = false
+EnableRealtimeLeakCheck = false

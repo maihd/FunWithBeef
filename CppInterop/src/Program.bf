@@ -17,6 +17,35 @@ class SubHelloClass : HelloClass
 	}
 }
 
+struct CppAlloc
+{
+    [Inline]
+	public void* Alloc(int size, int align)
+	{
+		return Internal.Malloc(size);
+	}
+
+    [Inline]
+	public void* AllocTyped(Type type, int size, int align)
+    {
+        void* data = Alloc(size, align);
+        if (type.HasDestructor)
+            MarkRequiresDeletion(data);
+        return data;
+    }
+    
+    [Inline]
+	public void Free(void* ptr)
+	{
+		Internal.Free(ptr);
+	}
+    
+    [Inline]
+    public void MarkRequiresDeletion(void* obj)
+    {
+        /* TODO: call this object's destructor when the allocator is disposed */
+    }
+}
 
 class Program
 {
@@ -45,15 +74,22 @@ class Program
 		defer HelloClass.Destroy(helloClass);
 		*/
 
-        let nativeCppClass = NativeCppClass.Create();
-        defer NativeCppClass.Destroy(nativeCppClass);
+        let allocator = CppAlloc();
+        let nativeCppClass = new:allocator NativeCppClass();
+        defer delete:allocator nativeCppClass;
+
+        Console.WriteLine("NativeCppClass stride in Beef: {}", sizeof(NativeCppClass));
+
+		//let nativeCppClass = NativeCppClass.Create();
+        //defer NativeCppClass.Destroy(nativeCppClass);
 
         // IDE will raise exception here
         //nativeCppClass.SayHi();
 
         // Enable object access check IDE will raise exception
-        nativeCppClass.message = "NativeCppClass";
+        nativeCppClass.Data.message = "NativeCppClass";
         let nativeCppClassData = nativeCppClass.Data;
+        nativeCppClass.SayHi();
 
 		let helloClass = new HelloClass();
 		defer delete helloClass;

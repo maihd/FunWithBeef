@@ -4,10 +4,18 @@
 - Now you can create subclass in Beef (see /src/Program.bf)
 - Notes: prefer C interop over C++, C is simple and have good ABI. C++ is complex and no standard ABI at all.
 
+
 ## Test cases
 - Interop with C++ naming mangle
 - Naming mangle cases: primitives, static function in class, struct in namespace, const mangle, reference, const reference
 - Failed handle free function wrapped in namespace, both named and anounymous
 
+
 ## Analyze the Beef Runtime and compare the difference with C++ runtime
-TODO.
+- Beef VTable and C++ VTable both store in the first field
+- But Beef Object may have mDebugInfo if BF_ENABLE_OBJECT_DEBUG_FLAGS enabled
+- Beef VTable != C++ VTable, so object allocator from C++ cannot called from Beef, and otherwise
+
+
+## Conclusion
+Donot interop C++ code.

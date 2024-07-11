@@ -1,5 +1,27 @@
 using System;
 
+struct CppClassBuffer<T>
+{
+#if BF_ENABLE_OBJECT_DEBUG_FLAGS
+    const let stride = strideof(T) - sizeof(int) * 2;
+#else
+    const let stride = strideof(T) - sizeof(int);
+#endif
+
+    [System.NoShow] private uint8[stride > 0 ? stride : 0] __data_buffer__;
+}
+
+struct CppClassBuffer<T, TSuper>
+{
+#if BF_ENABLE_OBJECT_DEBUG_FLAGS
+    const let stride = strideof(TSuper) - strideof(T) - sizeof(int) * 2;
+#else
+    const let stride = strideof(TSuper) - strideof(T) - sizeof(int);
+#endif
+
+    [System.NoShow] private uint8[stride > 0 ? stride : 0] __data_buffer__;
+}
+
 [AttributeUsage(.Class)]
 struct CppClassAttribute : this(Type dataType), Attribute, IOnTypeInit, IOnTypeDone
 {
@@ -14,17 +36,18 @@ struct CppClassAttribute : this(Type dataType), Attribute, IOnTypeInit, IOnTypeD
         }
 
 #if BF_ENABLE_OBJECT_DEBUG_FLAGS
-        let stride = dataType.Stride - sizeof(int) * 2;
+        let stride = dataType.Stride + sizeof(int) * 2;
 #else
-        let stride = dataType.Stride - sizeof(int);
+        let stride = dataType.Stride + sizeof(int);
 #endif
         if (stride > 0)
         {
             // This field never be touch by programmer
             Compiler.EmitTypeBody(type, scope $"[System.NoShow] private uint8[{stride}] __data_buffer__{Compiler.CallerLineNum};");
         }
-
-        Compiler.EmitTypeBody(type, scope $"public {dataTypeName}* Data => (.)&this.[Friend]mClassVData;");
+        
+        let offset = sizeof(int);
+        Compiler.EmitTypeBody(type, scope $"[Inline] public {dataTypeName}* Data => (.)(void*)((int)System.Internal.UnsafeCastToPtr(this) + {offset});");
     }
 
     [Comptime]
