@@ -6,7 +6,7 @@ By [design](https://www.beeflang.org/docs/foreward/), Beef values simplicity, co
 
 First of all, Beef easily interop C code
 ----------------------------------------
-Usable system language can be completed without C interop, because of its stable ABI (maybe claim as standard), and many existing libraries and frameworks written on it. So from the beginning, Beef chose this path, make sure it have good [C interop support](https://www.beeflang.org/docs/language-guide/interop/). And now that a main features to make program with Beef. You can call C function without the need of PInvoke, can pass struct by value or pointer without any conversion, C-like array, calling convention, and so on. Sections below will talking about how to use Modern C coding style apply to Beef, without the need of OOP features.
+Usable system language can be completed without C interop, because of its stable ABI (maybe claim as standard), and many existing libraries and frameworks written on it. So from the beginning, Beef chose this path, make sure it have good [C interop support](https://www.beeflang.org/docs/language-guide/interop/). And now that a main features to make program with Beef. You can call C function without the need of PInvoke, can pass struct by value or pointer without any conversion, C-like array, calling convention, and so on. Sections below will talking about how to use Modern C coding style apply to Beef, without the need of OOP features. This essays can be used for programmer starting Beef with C background.
 
 
 Struct are pass-by-values, plain old datas
@@ -47,6 +47,11 @@ Modern C encourage use values over pointers
 Beef by design based on C# syntax, which struct pass-by-value default. And Beef support optimize pass-by-value, which is will use SIMD register when available. Modern C compiler can do its as well.
 
 
+Immutable
+---------
+Using value mean we will have concepts of mutable and immutable values. By default parameters of Beef are immutable. Struct method cannot modify fields. Otherwise, you can mark method have modify struct fields with `mut` postfix of method signature, opposite to C++ const correct.
+
+
 Tagged Union
 ------------
 C have no OOP support, when facing problem need polymorphism to solve, programmer prefer tagged union. By far, Beef support tagged union in [language syntax](https://www.beeflang.org/docs/language-guide/datatypes/#enums), come with well pattern matching support. By using `case` keyword, syntax for pattern matching are easy to recognize, easy to read in form of English. So pattern matching is not hard to understand, just a syntatic sugar to reduce boilerplate code, details here: https://www.beeflang.org/docs/language-guide/pattern/.
@@ -77,6 +82,11 @@ Vector3Add(Vector3 { x = 1.0f, y = 2.0f, z = 3.0f }, v3);
 // Note: there a no anounymous fields construct
 // let v3 = Vector3 { 1.0f, 2.0f, 3.0f };
 ```
+
+
+Pointers
+--------
+Pointers is the most important concept in C, but come with hard to understand and use. This is only true for beginner, when the programmers meet experience that needed to influent C programming, pointer become the handy features. It's still a unsafe features, must with care. In old standard of C, for performance reason, pointers maybe overuse in many cases. In the modern C standards, new compiler with many tricks to optimized code when compiling, pointers may be avoided. Modern C encourage pass-by-value, also pass-by-reference cannot be avoided overtimes. User defined array types still need pointers. Come with this problem, Beef provide good support for pointers, with `ref`/`out` when you only need pass-by-reference. This come handy when interop C code, also port C code to Beef when needed. Lastly, written Modern C style in Beef more easily.
 
 
 Centralized Memory Management
