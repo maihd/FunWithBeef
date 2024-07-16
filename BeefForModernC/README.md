@@ -156,6 +156,13 @@ Conclusion
 That all things I know about Modern C to Beef. If you hate OOP, use Beef as a better C replacement also a good choice. For some cases, like parsing resource files, I find Modern C parts of Beef are more fit. I did [the parsing here](https://github.com/maihd/beef-gamedev/blob/main/Gamefx/src/LDtk.bf). Hope you have fun in the journey to explore about rediculous naming programming language Beef.
 
 
+Samples
+-------
+Projects and libraries use Modern C style in Beef:
+- Sokol-Beef: https://github.com/kochol/sokol-beef/blob/main/samples/sokol-triangle/src/Program.bf
+- LDtk-Beef: https://github.com/maihd/beef-gamedev/blob/main/Gamefx/src/LDtk.bf
+
+
 Further reading
 ---------------
 C is not obsolete language, many features have been added. Many ideas, solutions, coding style have been invented to make coding with C more pleasant, more performances, less error-prone. Take below resources to explore about Modern C, theses resources are more fit for game developer, because I am a gamedev:
