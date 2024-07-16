@@ -1,5 +1,5 @@
 # VectorMath in BeefLang
-Supported features:
+No much differences from C++ and C#, supported features:
 - Operators
 - SIMD
 - Optimized pass-by-value, return struct.
