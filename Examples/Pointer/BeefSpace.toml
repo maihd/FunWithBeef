@@ -1,0 +1,5 @@
+FileVersion = 1
+Projects = {Pointer = {Path = "."}}
+
+[Workspace]
+StartupProject = "Pointer"
