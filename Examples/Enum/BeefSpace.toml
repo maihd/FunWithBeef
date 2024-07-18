@@ -1,0 +1,5 @@
+FileVersion = 1
+Projects = {Enum = {Path = "."}}
+
+[Workspace]
+StartupProject = "Enum"
