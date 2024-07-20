@@ -1,0 +1,5 @@
+FileVersion = 1
+Projects = {MemoryManagement = {Path = "."}}
+
+[Workspace]
+StartupProject = "MemoryManagement"
