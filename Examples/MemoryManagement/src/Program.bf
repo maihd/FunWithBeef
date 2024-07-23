@@ -20,6 +20,7 @@ struct Arena : IRawAllocator
 	[Inline]
 	public void* Alloc(int size, int align) mut
 	{
+        Console.WriteLine("Allocate from {}:{}", Compiler.CallerFileName, Compiler.CallerLineNum); // Will print null:0, because new syntax have no knowledge of caller
 		return null;
 	}
 
@@ -47,5 +48,7 @@ class Program
 		IRawAllocator allocator = arena;
  		let pointerFromAlloc = new:allocator int();
 		delete:allocator pointerFromAlloc;
+
+        Console.Read();
 	}
 }
