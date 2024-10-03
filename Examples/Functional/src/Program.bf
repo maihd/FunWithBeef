@@ -13,6 +13,7 @@ class Program
             .Where((x) => x % 3 == 0)
             .Aggregate((acc, x) => acc + x)
             ;
+
         Console.WriteLine("result is {}", result);
         Console.Read();
     }
