@@ -47,5 +47,8 @@ class Program
 		IRawAllocator allocator = arena;
  		let pointerFromAlloc = new:allocator int();
 		delete:allocator pointerFromAlloc;
+
+		Console.Write("Press any key to exit...");
+		Console.Read();
 	}
 }
