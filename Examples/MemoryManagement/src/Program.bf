@@ -49,11 +49,6 @@ class Program
  		let pointerFromAlloc = new:allocator int();
 		delete:allocator pointerFromAlloc;
 
-<<<<<<< HEAD
-		Console.Write("Press any key to exit...");
-		Console.Read();
-=======
         Console.Read();
->>>>>>> edaf176cddd3b731b8c3ec50d396ade025985853
 	}
 }
