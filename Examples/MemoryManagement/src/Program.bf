@@ -4,7 +4,7 @@ using System;
 
 struct PrivateArena
 {
-	private void* Alloc(int size, int align)
+	private void* Alloc(int size, int align, String fileName = Compiler.CallerFileName, int lineNum = Compiler.CallerLineNum)
 	{
 		return null;
 	}
@@ -15,12 +15,13 @@ struct PrivateArena
 	}
 }
 
-struct Arena : IRawAllocator
+struct Arena
 {
 	[Inline]
-	public void* Alloc(int size, int align) mut
+	public void* Alloc(int size, int align, String fileName = Compiler.CallerFilePath, int lineNum = Compiler.CallerLineNum) mut
 	{
-        Console.WriteLine("Allocate from {}:{}", Compiler.CallerFileName, Compiler.CallerLineNum); // Will print null:0, because new syntax have no knowledge of caller
+        Console.WriteLine("Allocate from {}:{}", Compiler.CallerFilePath, Compiler.CallerLineNum); // Will print null:0, because new syntax have no knowledge of caller
+        Console.WriteLine("Allocate from {}:{}", fileName, lineNum); // Will print <ProjectPath>/src/Program.bf:45, that how Beef compiler work
 		return null;
 	}
 
@@ -45,9 +46,9 @@ class Program
 		let pointer = new:arena int();
 		delete:arena pointer;
 
-		IRawAllocator allocator = arena;
+		/*IRawAllocator allocator = arena;
  		let pointerFromAlloc = new:allocator int();
-		delete:allocator pointerFromAlloc;
+		delete:allocator pointerFromAlloc;*/
 
         Console.Read();
 	}
