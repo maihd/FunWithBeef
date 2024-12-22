@@ -1,0 +1,5 @@
+FileVersion = 1
+Projects = {ImGuiExample = {Path = "."}, ImGui = {Path = "imgui-beef"}, ImGuiImplOpenGL3 = {Path = "imgui-beef/ImGuiImplOpenGL3"}, ImGuiImplSDL = {Path = "imgui-beef/ImGuiImplSDL"}}
+
+[Workspace]
+StartupProject = "ImGuiExample"

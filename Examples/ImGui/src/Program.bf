@@ -35,8 +35,8 @@ class Program
 			SDL.GL_DeleteContext(context);
 		}
 
-		SDL.SDL_GL_MakeCurrent(window, context);
-		if (GL.LoadProcs((name) => SDL.SDL_GL_GetProcAddress(name.Ptr)) case .Err)
+		SDL.GL_MakeCurrent(window, context);
+		if (GL.LoadProcs((name) => SDL.GL_GetProcAddress(name.Ptr)) case .Err)
 		{
 			Console.Error.WriteLine("Error: Failed to load OpenGL functions!");
 			return;

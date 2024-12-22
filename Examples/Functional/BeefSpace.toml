@@ -1,5 +1,5 @@
 FileVersion = 1
-Projects = {Functional = {Path = "."}}
+Projects = {Functional = {Path = "."}, "Beef.Linq" = {Path = "Beef.Linq/src"}}
 
 [Workspace]
 StartupProject = "Functional"

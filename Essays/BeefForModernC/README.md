@@ -107,7 +107,7 @@ Modern hardware and compiler are more complex, but come with more powerful. CPU 
 Enum, tuples, error handling
 ----------------------------
 Enum are a good feature that help C programmer abstract the code without overhead. But C enum have some limitations:
-- Underlying type are uint32, but no ensure all compilers do this. C23 will support declare underlying type, but when will C23 are widely used?
+- Underlying type are int32/uint32, but no ensure all compilers do this. C23 will support declare underlying type, but when will C23 are widely supported and used?
 - Because of this, some library avoid use typedef of enum in struct members and parameters to provide stable ABI
 - Enum members are globally export, maybe conflict without library, prefix must be used.
 - If use flags, make sure only support 32 distinct members (combined members doesnot count). More members is undefined behaviours between compilers.

@@ -19,7 +19,7 @@ This folder contains essays to explain the ideas and research about Beef.
 
 Examples
 --------
-This folder contains code examples. You will find code snippets from C# or C++ can be reused.
+This folder contains code examples. You will find code snippets from C# or C++ can be reused. Each example contains its own workspace, to avoid redundant building process for untargeted projects. And it's scaling better.
 - [Build Beef application to android](/Examples/Android)
 - [C library interop (calling C code from Beef)](/Examples/CInterop)
 - [Fast, no runtime reflection tweening for entity/game object](/Examples/ComptimeTweening)
