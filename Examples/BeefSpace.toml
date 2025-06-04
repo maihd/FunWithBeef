@@ -2,4 +2,4 @@ FileVersion = 1
 Projects = {HelloWorld = {Path = "HelloWorld"}, CInterop = {Path = "CInterop"}, VectorMath = {Path = "VectorMath"}, Pointer = {Path = "Pointer"}, Enum = {Path = "Enum"}}
 
 [Workspace]
-StartupProject = "Pointer"
+StartupProject = "VectorMath"

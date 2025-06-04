@@ -37,6 +37,6 @@ This folder contains code examples. You will find code snippets from C# or C++ c
 
 Meta
 ----
-Beef version: 0.43.5 nightly (>= 18/06/2024)
+Beef version: 0.43.6 nightly (>= 03/06/2025 DD/MM/YYYY)
 Source License: No license at all, the code is just for learning/research purposes.
 Dependencies Licenses: Find its in folder if exists.

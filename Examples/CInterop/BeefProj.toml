@@ -5,7 +5,7 @@ Name = "CInterop"
 StartupObject = "CInterop.Program"
 
 [Configs.Debug.Win64]
-LibPaths = ["$(ProjectDir)/zig-out/lib/CInterop.lib"]
+LibPaths = ["$(ProjectDir)/zig-out/lib/CInterop.lib", "ntdll.lib"]
 
 [Configs.Release.Win64]
 LibPaths = ["$(ProjectDir)/zig-out/lib/CInterop.lib"]

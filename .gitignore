@@ -3,6 +3,7 @@ recovery
 
 zig-out
 zig-cache
+.zig-cache
 
 *.user
 BeefSpace_User.toml

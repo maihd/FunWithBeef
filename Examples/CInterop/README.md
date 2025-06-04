@@ -5,3 +5,6 @@ Nothing much to talking here. C Interop in Beef is well-designed based on C#, wh
 
 ## Further readings
 https://www.beeflang.org/docs/language-guide/interop/
+
+## Meta
+Zig Version: v0.14.x
