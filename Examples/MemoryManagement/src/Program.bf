@@ -158,7 +158,7 @@ class Program
 	static void Main()
 	{
 		/* This code cannot compiled!
-        ** Beef still follow the OOP rules for allocator, private method cannot be called from outside of type
+        ** Beef allocation expressions still follow the OOP rules for allocator, private method cannot be called from outside of type
 		let privateArena = PrivateArena();
 		let pointer = new:privateArena int();
 		delete:privateArena pointer;
