@@ -44,7 +44,14 @@ In Modern C program, we were encouraged to use fixed-size primitives, but will t
 
 Modern C encourage use values over pointers
 -------------------------------------------
-Beef by design based on C# syntax, which struct pass-by-value default. And Beef support optimize pass-by-value, which is will use SIMD register when available. Modern C compiler can do its as well.
+Beef by design based on C# syntax, which struct pass-by-value default. And Beef support optimize pass-by-value, which is will use SIMD register when available. Modern C compiler can do its as well. Beef also support expressions block (in C only have on GCC/Clang).
+```Beef
+Console.WriteLine("Result={}",
+    {
+        GetByRef(let val);
+        val
+    });
+```
 
 
 Immutable
@@ -89,6 +96,11 @@ Pointers
 Pointers is the most important concept in C, but come with hard to understand and use. This is only true for beginner, when the programmers meet experience that needed to influent C programming, pointer become the handy features. It's still a unsafe features, must with care. In old standard of C, for performance reason, pointers maybe overuse in many cases. In the modern C standards, new compiler with many tricks to optimized code when compiling, pointers may be avoided. Modern C encourage pass-by-value, also pass-by-reference cannot be avoided overtimes. User defined array types still need pointers. Come with this problem, Beef provide good support for pointers, with `ref`/`out` when you only need pass-by-reference. This come handy when interop C code, also port C code to Beef when needed. Lastly, written Modern C style in Beef more easily.
 
 
+Pointer arithmetic
+------------------
+Unlike C, in Beef, we cannot cast pointer to `int` or other value type. And unlike C++, we cannot cast `this` to pointer (`this` is value type, not a pointer), but we can use `Internal.UnsafeCastToPtr(this)` to get `void*` pointer. Fortunately, we can do pointer arithmetic. Just use `uint8*` to increase/decrease the address of the pointer. That how I do stack allocations.
+
+
 Centralized Memory Management
 -----------------------------
 In the modern C (and its family languages like Zig, Odin) memory will be management through arena/allocator. Which is also called centralized memory management. [Beef support allocator](https://www.beeflang.org/docs/language-guide/memory/) in language features, support real-time leak detector (which can be turn off with distinct build options, and commonly remove from release build).
@@ -98,7 +110,7 @@ Attributes
 ----------
 Modern hardware and compiler are more complex, but come with more powerful. CPU now can support many features to solve many problems and topics. One simple use case is to have attributes for each data structures and functions. Modern C standard attributes, which are supported by Beef:
 - Align: C alignas
-- Inline: C inline, more like __forceinline
+- Inline: C inline, more like `__forceinline`/`__attribute__((always_inline))`
 - Union: to avoid redundant keywords, Beef use attribute to mark struct are union (C# StructLayout attributes)
 - CRepr: use C struct layout, Beef have concept of struct stride over struct size. Which is reduce hole in struct.
 - Packed: not clear when comparing with `#pragma pack`
@@ -160,7 +172,10 @@ Samples
 -------
 Projects and libraries use Modern C style in Beef:
 - Sokol-Beef: https://github.com/kochol/sokol-beef/blob/main/samples/sokol-triangle/src/Program.bf
+- Raylib-Beef: https://github.com/Starpelly/raylib-beef
+- Clay-Beef: https://github.com/farism/clay-beef
 - LDtk-Beef: https://github.com/maihd/beef-gamedev/blob/main/Gamefx/src/LDtk.bf
+- ...and more projects that bindings C libraries
 
 
 Further reading
@@ -170,3 +185,4 @@ C is not obsolete language, many features have been added. Many ideas, solutions
 - https://floooh.github.io/2019/09/27/modern-c-for-cpp-peeps.html
 - https://sasluca.github.io/cmm.html
 - https://www.rfleury.com/p/the-codepath-combinatoric-explosion#%C2%A7questions-vs-answers
+- A clean solution for dynamic dispatch in C, which also effiency: https://github.com/cmuratori/misc/blob/main/cleancodeqa-2.md
