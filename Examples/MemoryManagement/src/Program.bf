@@ -74,7 +74,7 @@ struct Arena
         }
     }
 
-    // BeefLang allocator's methods
+    // BeefLang allocator's methods (no need Free method)
 
 	[Inline]
 	public void* Alloc(int size, int align, String fileName = Compiler.CallerFilePath, int lineNum = Compiler.CallerLineNum) mut
@@ -98,12 +98,6 @@ struct Arena
 
 		return ptr;
 	}
-
-	[Inline]
-	public void Free(void* ptr) mut
-	{
-        // noops
-	}
 }
 
 struct ArenaTemp : IDisposable
@@ -122,6 +116,12 @@ struct ArenaTemp : IDisposable
         if (this.arena != null)
         {
             this.arena.head = this.mark;
+
+            // Note:
+            //    arena maybe grow, the chain will broke, we should do double-linked list for arena
+            //    and revert the .curr point to this arena (the first chain)
+            //    but in context of temporary allocator, arena should not be grow, or small times grow
+            //    double-linked list just for safety, and have small performance panelty
     
             this.arena = null;
             this.mark = null;
@@ -130,28 +130,26 @@ struct ArenaTemp : IDisposable
 
     // Scope (choose one name you prefered)
 
-    public mixin DeferDispose() mut
+    /*public mixin DeferDispose() mut
     {
         defer:: Dispose();
-    }
+    }*/
 
     public mixin AutoDispose() mut
     {
+        // defer mean Dispose() will called when the scope of mixin is end (exactly called immediately in this context)
+        // defer:: mean Dispose() will called when the outer scope of mixin is end (exactly called when scope of caller is end)
+        // this work on other scope-depend statements/expressions (new, scope, append, ...)
         defer:: Dispose();
     }
 
-    // BeefLang allocator's methods
+    // BeefLang allocator's methods (no need Free method)
 
     [Inline]
     public void* Alloc(int size, int align, String fileName = Compiler.CallerFilePath, int lineNum = Compiler.CallerLineNum) mut
     {
+        // For tracking allocations, just passing fileName+lineNum from caller of this method, no need to be 2 different macros like in C/C++
         return arena.Alloc(size, align, fileName, lineNum);
-    }
-
-    [Inline]
-    public void Free(void* ptr) mut
-    {
-        arena.Free(ptr);
     }
 }
 
@@ -159,7 +157,8 @@ class Program
 {
 	static void Main()
 	{
-		/* This code can compile
+		/* This code cannot compiled!
+        ** Beef still follow the OOP rules for allocator, private method cannot be called from outside of type
 		let privateArena = PrivateArena();
 		let pointer = new:privateArena int();
 		delete:privateArena pointer;
@@ -176,7 +175,7 @@ class Program
         Console.WriteLine("[After] Address of pointer: {}", (void*)pointer);
         Console.WriteLine("[After] Address of arena: {}, tail of arena: {}", (void*)arena, arena.tail);
 
-		delete:arena pointer; // No need
+		//delete:arena pointer; // We donot provide Free() method, that mean this code will not compiled! Also mean Beef is smart enough to know some allocators does not need free pointer.
         Console.WriteLine("[AfterDiposeTemp] Address of arena: {}, tail of arena: {}", (void*)arena, arena.tail);
 
         Arena.Destroy(arena);
