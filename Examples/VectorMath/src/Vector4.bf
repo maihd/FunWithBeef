@@ -1,6 +1,7 @@
 namespace VectorMath;
 
 using System;
+using System.Numerics;
 
 //typealias Vector4 = System.Numerics.float4;
 
@@ -8,10 +9,12 @@ using System;
 [Swizzle(4)]
 public struct Vector4
 {
-	public float x;
+	/*public float x;
 	public float y;
 	public float z;
-	public float w;
+	public float w;*/
+
+    public using float4 data;
 
 	[Inline]
 	public this()
@@ -19,19 +22,27 @@ public struct Vector4
 		this = default;
 	}
 
+    [Inline]
+    public this(float4 data)
+    {
+        this.data = data;
+    }
+
 	[Inline]
 	public this(float x, float y, float z, float w)
 	{
-		this.x = x;
+		/*this.x = x;
 		this.y = y;
 		this.z = z;
-		this.w = w;
+		this.w = w;*/
+        this.data = float4(x, y, z, w);
 	}
 
 	[Inline]
 	public static Self operator+(Self lhs, Self rhs)
 	{
-		return .(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z, lhs.w + rhs.w);
+        return .(lhs.data + rhs.data);
+		//return .(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z, lhs.w + rhs.w);
 	}
 
 	[Inline]
