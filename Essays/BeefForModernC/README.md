@@ -77,7 +77,7 @@ let v3 = Vector3 { x = 1.0f, y = 2.0f, z = 3.0f };
 
 Compound literal
 ----------------
-C99 does not only support create struct with designated initialization when declare value, but also support create struct with designated initialization any where appricated. Which is called compound literal. Beef have this, but no need to wrap struct name into parens.
+C99 does not only support create struct with designated initialization when declare value, but also support create struct with designated initialization any where appricated. Which is called compound literal. Beef has this, but no need to wrap struct name into parens. And has type inference when the context is clear.
 
 ```C
 Vector3Add((Vector3){ 1.0f, 2.0f, 3.0f }, v3);
@@ -86,6 +86,16 @@ Vector3Add((Vector3){ x = 1.0f, y = 2.0f, z = 3.0f }, v3);
 
 ```Beef
 Vector3Add(Vector3 { x = 1.0f, y = 2.0f, z = 3.0f }, v3);
+
+// Type-inference with `.`
+Vector3Add(.{ x = 1.0f, y = 2.0f, z = 3.0f });
+
+// Type-inference with `.`, with constructor (may have default value)
+Vector3Add(.(1.0f, 2.0f, 3.0f));
+
+// Type-inference with `.`, with constructor (may have default value), with named arguments
+Vector3Add(.(x: 1.0f, y: 2.0f, z: 3.0f));
+
 // Note: there a no anounymous fields construct
 // let v3 = Vector3 { 1.0f, 2.0f, 3.0f };
 ```
@@ -161,6 +171,16 @@ C have no RAII. So programmer need to cleanup the resources manually. This is no
 - Large functions, hard to track when resources are cleanup
 - Declare and forget context, i.e temporary allocator
 - Multi-path to returns functions, where its return path must be cleanup resources
+> **_NOTE:_** This is the hack I used to make AutoRelease/FrameAllocations/TempAllocations.
+
+
+Math/VectorMath, SIMD, Operators Overloading
+--------------------------------------------
+Coming to Modern C, usually we are a gamedev, so we cannot avoid math programming (also SIMD). C have well support SIMD through compiler extensions. But it lack of operators overloading. We have to use Clang extensions or compile C code as C++ (may miss main features like designated initialization). Someones sticks to operator-like function (ex: vec2_add). And inline function sometime maybe not inlined (doesnot have the same behaviours through compilers). BeefLang so this problem well (creator is a variant in gamedev, PopCap Games Founder). SIMD is a work as compiler-level, the compiler will choose good fit intrintics for the operations, the programmer no need to know hundreds intrinsics to the job for multi platforms (maybe not the best performance, but it save programming time with good performance).
+
+> **_NOTE:_** 
+> 1. You should use the nightly build to get best support of SIMD, older version may crash the IDE when compiling.
+> 2. BeefLang have property, attribute and comptime, we can do swizzle by generating properties
 
 
 Conclusion
