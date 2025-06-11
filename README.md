@@ -14,7 +14,7 @@ Essays
 ------
 This folder contains essays to explain the ideas and research about Beef.
 - [Using Beef as Modern C](/Essays/BeefForModernC)
-- [Comparing Beef with Modern C++](/Essays/MordernC%2B%2BComparing)
+- [Comparing Beef with Modern C++](/Essays/ModernC%2B%2BComparing)
 - [Comparing Beef with Orthodox C++](/Essays/OrthodoxC%2B%2BComparing)
 
 
