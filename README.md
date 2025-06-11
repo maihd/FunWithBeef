@@ -13,8 +13,9 @@ code over complex-but-performance, which mean it's more C than C++, just as C# f
 Essays
 ------
 This folder contains essays to explain the ideas and research about Beef.
-- [Using Beef as Modern C language](/Essays/BeefForModernC)
-- [Using Beef as Orthodox C++ language](/OrthodoxC%2B%2BComparing)
+- [Using Beef as Modern C](/Essays/BeefForModernC)
+- [Comparing Beef with Modern C++](/Essays/MordernC%2B%2BComparing)
+- [Comparing Beef with Orthodox C++](/Essays/OrthodoxC%2B%2BComparing)
 
 
 Examples
