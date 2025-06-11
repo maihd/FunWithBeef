@@ -8,6 +8,7 @@ Notes for beginners
 -------------------
 By [design](https://www.beeflang.org/docs/foreward/), Beef prefer performance-with-simple
 code over complex-but-performance, which mean it's more C than C++, just as C# features for more ergonomic development. So, good C knowledges are better than C++, learning C is good ideas. [I have learn much C and topics](https://github.com/maihd/maicstyle), but still feel not enough. Details can find in essays sections. 
+> After working a while with this project, I recommend you start a project like this learn more about techs, programming langugages, frameworks/engines. This project help me learn a lots.
 
 
 Essays
