@@ -9,19 +9,19 @@ Disclaimer:
 
 Comparison table
 ----------------
-| Features                          | Beef                       | Modern C++ (>= C++11)                   |
-| --------------------------------- | -------------------------- | --------------------------------------- |
-| Implicitly-typed local variables  | var, let                   | auto, const auto                        |
-| Core type system                  | Modern Archetypes          | Simple Archetypes                       |
-| Tagged Union & Variant & Tuple    | Language-level             | Library-level                           |
-| Error Handling                    | Result, Optional           | Exception                               | 
-| Comptime                          | ConstEval, C# Preprocessor | `constexpr`, `template`, C Preprocessor |
-| Constraints and concepts          | C#-like + CompTime         | Language-level                          |
-| Generic                           | C#-like                    | `template`                              | 
-| Literals                          | C#-like + extensions       | C-like, extensions, user-defined        |
-| Memory management                 | Allocator + Syntaxes       | RAII                                    |
-| Safety features                   | Language-level + IDE       | RAII + 3rd Party Tools                  |
-| Reflection                        | Language-level             | Library-level                           |
+| Features                          | Beef                       | Modern C++ (>= C++11)                       |
+| --------------------------------- | -------------------------- | ------------------------------------------- |
+| Implicitly-typed local variables  | `var`, `let`               | `auto`, `const auto`                        |
+| Core type system                  | Modern Archetypes          | Simple Archetypes                           |
+| Tagged Union & Variant & Tuple    | Language-level             | Library-level                               |
+| Error Handling                    | Result, Optional           | Exception, `std::optional`, `std::expected` | 
+| Comptime                          | ConstEval, C# Preprocessor | `constexpr`, `template`, C Preprocessor     |
+| Constraints and concepts          | C#-like + CompTime         | C++20 feature: `concept`, `requires`        |
+| Generic                           | C#-like                    | `template`                                  | 
+| Literals                          | C#-like + extensions       | C-like, extensions, user-defined            |
+| Memory management                 | Allocator + Syntaxes       | RAII                                        |
+| Safety features                   | Language-level + IDE       | RAII + 3rd Party Tools                      |
+| Reflection                        | Language-level             | Library-level                               |
 
 
 Implicitly-typed local variables
