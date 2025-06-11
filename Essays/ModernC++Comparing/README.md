@@ -7,6 +7,23 @@ Disclaimer:
 - I almost avoid Modern C++, but it have some features that we needed. But in Beef, we have thoses. This docs maybe work as decision making analysis.
 
 
+Comparison table
+----------------
+| Features                          | Beef                       | Modern C++ (>= C++11)                   |
+| --------------------------------- | -------------------------- | --------------------------------------- |
+| Implicitly-typed local variables  | var, let                   | auto, const auto                        |
+| Core type system                  | Modern Archetypes          | Simple Archetypes                       |
+| Tagged Union & Variant & Tuple    | Language-level             | Library-level                           |
+| Error Handling                    | Result, Optional           | Exception                               | 
+| Comptime                          | ConstEval, C# Preprocessor | `constexpr`, `template`, C Preprocessor |
+| Constraints and concepts          | C#-like + CompTime         | Language-level                          |
+| Generic                           | C#-like                    | `template`                              | 
+| Literals                          | C#-like + extensions       | C-like, extensions, user-defined        |
+| Memory management                 | Allocator + Syntaxes       | RAII                                    |
+| Safety features                   | Language-level + IDE       | RAII + 3rd Party Tools                  |
+| Reflection                        | Language-level             | Library-level                           |
+
+
 Implicitly-typed local variables
 --------------------------------
 Modern C++ prefer `auto` to avoid long type name when declarations.
@@ -95,11 +112,6 @@ Reflection
 ----------
 Modern C++: No standard library.
 Beef: Limited features. Mostly for CompTime works, see details: https://www.beeflang.org/docs/language-guide/reflection/
-
-
-Comparing table
----------------
-WIP.
 
 
 Conculusion
