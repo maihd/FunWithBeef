@@ -35,6 +35,10 @@ This folder contains code examples. You will find code snippets from C# or C++ c
 - [Create desktop with Win32 API (hand written bindings, input handling)](/Examples/Win32Window)
 - [Unity Scripting with Beef (Unity NativeScript)](/Examples/UnityScripting)
 
+Suggesting ideas
+----------------
+Open an issue, or a discusstion.
+
 
 Meta
 ----
