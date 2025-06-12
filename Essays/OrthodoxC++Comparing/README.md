@@ -1,6 +1,7 @@
 Orthodox C++ vs Beef Comparing
 ------------------------------
-I found [Orthodox C++](https://gist.github.com/bkaradzic/2e39896bc7d8c34e042b) and [Beef](https://www.beeflang.org/) are very similar. Bgfx (same author with Orthodox C++) does have [bultin Beef bindings](https://github.com/bkaradzic/bgfx/tree/master/bindings/bf). 
+I found [Orthodox C++](https://gist.github.com/bkaradzic/2e39896bc7d8c34e042b) and [Beef](https://www.beeflang.org/) are very similar. Bgfx (same author with Orthodox C++) does have [builtin Beef bindings](https://github.com/bkaradzic/bgfx/tree/master/bindings/bf). 
+> Update 12/06/2025: Beef C++ Runtime was written eith Orthodox C++ philosophy. Exploring the BeefLang github repo to find more.
 
 
 Beef design goals
