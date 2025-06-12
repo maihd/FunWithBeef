@@ -38,8 +38,8 @@ C++ design goals
 Unclear. That why we have to stick to one and only one subset of C++ (on one project).
 
 
-Common features
----------------
+Beef features from Orthodox C++ view
+------------------------------------
 - Prefer C code that works, good C interop
 - Don't do [this](https://archive.md/2014.04.28-125041/http://www.boost.org/doc/libs/1_55_0/libs/geometry/doc/html/geometry/design.html), the end of "design rationale" in Beef/Orthodox C++ should be immedately after "Quite simple, and it is usable. EOF".
 - No runtime C wrapper
@@ -47,8 +47,10 @@ Common features
 - No bad RTTI (Beef provide good and familiar Reflection system, with additional comptime code generation)
 - No complicated metaprogramming with templates
 - Standard library with good memory management, unify implementation for all platforms (2 main reasons gamedev avoid STL)
-- Support all syntaxes sugar of C++17 (but simpler):
-    > As of January 14th 2022, Orthodox C++ committee approved use of C++17.
+- Enum, tagged union, tuples (also zero-cost overhead) help better handling state, error with cleaner approachs
+- Any data structures in Beef have clear layout, underlying type can access by programmer
+- Support all syntaxes sugar of C++20 (but simpler):
+    > As of January 14th 2025, Orthodox C++ committee approved use of C++20.
 
 
 Combine Orthodox C++ with Beef
