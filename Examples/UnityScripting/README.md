@@ -9,6 +9,11 @@ Based on https://www.jacksondunstan.com/articles/3938.
 - C# function pointer: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-9.0/function-pointers
 - Other approachs: https://github.com/i-saint/UnityCppScript
 
+## Disclaimer
+- This use dynamic dispatch (marshaling, pinvoke) to call Unity API, so avoid heavy working with Unity API in Beef
+- If your framework, game have good performance, dont do more works
+- Hybrid ECS, Burst/Job can support, have better C# compatibility, and have native support by Unity
+
 ## Suggestions
 - Use a framework in Unity to prototype your game first: Game Creator 2, TopDown Engine
 - Port the framework to Beef for native performance (advanced tech skills required)
