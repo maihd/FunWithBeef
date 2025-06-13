@@ -36,6 +36,21 @@ This folder contains code examples. You will find code snippets from C# or C++ c
 - [Create desktop with Win32 API (hand written bindings, input handling)](/Examples/Win32Window)
 - [Unity Scripting with Beef (Unity NativeScript)](/Examples/UnityScripting)
 
+
+TODOs
+-----
+- Make research version from examples (convert into topics)
+- Deep dive into `interface`: underlying type, performance, abstraction overhead
+- Deep dive into pattern matching: what syntaxes support, limitations, comparing to C#. Some proposals worked.
+- Deep dive into function pointer, delegate, lambda, dynamic dispatch (also work with memory management)
+- Coroutine, Async:
+    - Comptime for faster and safer coding with async
+    - Memory management
+    - Syntax proposal?
+- Deep dive into functional programming, how compiler optimize the code to avoid function call overhead.
+- Final plan: make a guidebook =))
+
+
 Suggesting ideas
 ----------------
 Open an issue, or a discusstion.
