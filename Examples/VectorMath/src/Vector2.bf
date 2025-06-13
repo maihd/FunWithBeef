@@ -5,13 +5,15 @@ using System.Numerics;
 
 [Swizzle(2)]
 public struct Vector2
+    // Cannot extends float2, compiler will not handle intrinsics for type have other name than float2
+    // : float2
 {
-	public using float2 data;
+    public using float2 data;
 
     [Inline]
 	public this()
 	{
-		this = default;
+        this.data = float2();
 	}
     
     [Inline]
@@ -19,6 +21,12 @@ public struct Vector2
 	{
 		this.data = data;
 	}
+
+    [Inline]
+    public this(float s)
+    {
+        this.data = float2(s, s);
+    }
     
     [Inline]
 	public this(float x, float y)
@@ -38,18 +46,22 @@ public struct Vector2
     [Inline]
 	public static Self operator-(Self lhs, Self rhs)
 	{
-		return .(lhs.x - rhs.x, lhs.y - rhs.y);
+		return .(lhs.data - rhs.data);
+		//return .(lhs.x - rhs.x, lhs.y - rhs.y);
 	}
     
     [Inline]
 	public static Self operator*(Self lhs, Self rhs)
 	{
-		return .(lhs.x * rhs.x, lhs.y * rhs.y);
+		return .(lhs.data * rhs.data);
+		//return .(lhs.x * rhs.x, lhs.y * rhs.y);
 	}
     
     [Inline]
 	public static Self operator/(Self lhs, Self rhs)
 	{
+        // Divide intrinsic for float2 is not handled
+        //return .(lhs.data / rhs.data);
 		return .(lhs.x / rhs.x, lhs.y / rhs.y);
 	}
 	
