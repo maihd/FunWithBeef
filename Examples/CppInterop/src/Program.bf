@@ -76,12 +76,12 @@ class Program
 
         let allocator = CppAlloc();
         let nativeCppClass = new:allocator NativeCppClass();
-        defer delete:allocator nativeCppClass;
+        //defer delete:allocator nativeCppClass; // Uncomment to if leak detector work or not -> Beef cannot track Object without BfObject fields in object
 
         Console.WriteLine("NativeCppClass stride in Beef: {}", sizeof(NativeCppClass));
 
-		//let nativeCppClass = NativeCppClass.Create();
-        //defer NativeCppClass.Destroy(nativeCppClass);
+		let nativeCppClass = NativeCppClass.Create();
+        defer NativeCppClass.Destroy(nativeCppClass);
 
         // IDE will raise exception here
         //nativeCppClass.SayHi();
@@ -90,6 +90,9 @@ class Program
         nativeCppClass.Data.message = "NativeCppClass";
         let nativeCppClassData = nativeCppClass.Data;
         nativeCppClass.SayHi();
+
+        Object bfObject = nativeCppClass;
+        Console.WriteLine("bfObject: {}", bfObject.ToString(..scope String()));
 
 		let helloClass = new HelloClass();
 		defer delete helloClass;

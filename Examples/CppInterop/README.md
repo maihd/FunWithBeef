@@ -14,8 +14,9 @@
 ## Analyze the Beef Runtime and compare the difference with C++ runtime
 - Beef VTable and C++ VTable both store in the first field
 - But Beef Object may have mDebugInfo if BF_ENABLE_OBJECT_DEBUG_FLAGS enabled
-- Beef VTable != C++ VTable, so object allocator from C++ cannot called from Beef, and otherwise
+- Beef VTable != C++ VTable, so object allocated from C++ virtual methods cannot called from Beef, and otherwise
+- If do some tricks like CppClass attribute, leak detector cannot tracks thoses objects
 
 
 ## Conclusion
-Donot interop C++ code.
+Shouldnot interop C++ code.

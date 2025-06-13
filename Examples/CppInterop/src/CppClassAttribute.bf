@@ -42,12 +42,14 @@ struct CppClassAttribute : this(Type dataType), Attribute, IOnTypeInit, IOnTypeD
 #endif
         if (stride > 0)
         {
-            // This field never be touch by programmer
+            // This field never be touched by programmer
             Compiler.EmitTypeBody(type, scope $"[System.NoShow] private uint8[{stride}] __data_buffer__{Compiler.CallerLineNum};");
         }
         
         let offset = sizeof(int);
         Compiler.EmitTypeBody(type, scope $"[Inline] public {dataTypeName}* Data => (.)(void*)((int)System.Internal.UnsafeCastToPtr(this) + {offset});");
+
+        // Todos: any properties base on fields of Data
     }
 
     [Comptime]

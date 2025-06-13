@@ -9,9 +9,20 @@ struct Vector3
 	public float x, y, z;
 }
 
+[CRepr]
+struct Vector4
+{
+    public float x, y, z, w;
+}
+
 function int32 FnGameObjectNew();
 function int32 FnGameObjectGetTransform(int32 thisHandle);
 function void FnTransformSetPosition(int32 thisHandle, Vector3 position);
+
+class Transform
+{
+
+}
 
 class Library
 {

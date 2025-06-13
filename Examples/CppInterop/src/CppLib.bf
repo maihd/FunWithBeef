@@ -36,10 +36,29 @@ namespace CStrContainer
 	}
 }
 
+public class CppObject : Object, IHashable
+{
+    public override void ToString(String output)
+    {
+        output.AppendF("({})", this.GetHashCode());
+    }
+
+    public int GetHashCode()
+    {
+        return (int)Internal.UnsafeCastToPtr(this);
+    }
+}
+
 [CRepr, AlwaysInclude]
-public class HelloClass
+public class HelloClass : CppObject
 {
 	public c_char* message = null;
+    /*{
+        get
+        {
+            return ((uint8*)Internal.UnsafeCastToPtr(this))
+        }
+    }*/
 	
 	// Below code cannot compiled:
 	//[LinkName("HelloClass::Create")]
