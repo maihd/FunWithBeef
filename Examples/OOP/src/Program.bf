@@ -11,7 +11,7 @@ using System;
 //    }
 //}
 
-[CRepr, Packed, Align(4)]
+[CRepr, Packed, Align(8)]
 class Super
 {
     public int32 i;
@@ -19,7 +19,7 @@ class Super
     public bool b;
 }
 
-[CRepr, Packed, Align(4)]
+[CRepr, Packed, Align(8)]
 class Child : Super
 {
     public uint32 u;

@@ -2,4 +2,10 @@ FileVersion = 1
 
 [Project]
 Name = "BeefExtendCpp"
+TargetType = "BeefLib"
 StartupObject = "BeefExtendCpp.Program"
+
+[Configs.Debug.Win64]
+BuildKind = "DynamicLib"
+BeefLibType = "Static"
+LibPaths = ["$(ProjectDir)\\projects\\vs2022\\bin\\x64\\Debug\\BeefExtendCpp_CppLib_vs2022.lib"]
