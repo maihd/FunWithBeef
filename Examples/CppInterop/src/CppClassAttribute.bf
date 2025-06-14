@@ -68,3 +68,94 @@ struct CppClassAttribute : this(Type dataType), Attribute, IOnTypeInit, IOnTypeD
         //}
     }
 }
+
+[AttributeUsage(.Interface)]
+struct BeefVTableAttribute : this(Type classType), Attribute, IOnTypeInit
+{
+    [Comptime]
+    public void OnTypeInit(Type selfType, Self* prev)
+    {
+        for (let method in classType.GetMethods())
+        {
+            if (method.IsConstructor || method.IsDestructor)
+            {
+                continue;
+            }
+
+            if (method.IsVirtual || method.IsAbstract)
+            {
+                let interfaceMethod = scope String();
+                interfaceMethod.AppendF("{}", method.ReturnType.GetFullName(..scope String()));
+                interfaceMethod.AppendF(" {}", method.Name);
+                
+                interfaceMethod.AppendF("(");
+                interfaceMethod.AppendF("{}", method.GetParamsDecl(..scope String()));
+                interfaceMethod.AppendF(");\n");
+
+                Compiler.EmitTypeBody(selfType, interfaceMethod);
+            }
+        }
+    }
+}
+
+
+[AttributeUsage(.Interface)]
+struct CppVTableAttribute : this(Type classType), Attribute, IOnTypeInit
+{
+    const StringView[?] BfObjectDefaultVirtualMethods = .(
+        "DynamicCastToTypeId",
+        "DynamicCastToInterface",
+        "DynamicCastToSignature",
+        "ToString",
+        "GCMarkMembers"
+    );
+
+    [Comptime]
+    public void OnTypeInit(Type selfType, Self* prev)
+    {
+        for (let method in classType.GetMethods())
+        {
+            if (method.IsConstructor || method.IsDestructor)
+            {
+                continue;
+            }
+
+            if (method.Name.StartsWith("get__") || method.Name.StartsWith("set__"))
+            {
+                continue;
+            }
+
+            if (BfObjectDefaultVirtualMethods.Contains(method.Name))
+            {
+                continue;
+            }
+
+            if (method.IsVirtual || method.IsAbstract)
+            {
+                let interfaceMethod = scope String();
+                interfaceMethod.AppendF("{}", method.ReturnType.GetFullName(..scope String()));
+                interfaceMethod.AppendF(" {}", method.Name);
+                
+                interfaceMethod.AppendF("(");
+                interfaceMethod.AppendF("{}", method.GetParamsDecl(..scope String()));
+                interfaceMethod.AppendF(");\n");
+
+                Compiler.EmitTypeBody(selfType, interfaceMethod);
+            }
+        }
+    }
+}
+
+namespace System.Reflection
+{
+    extension MethodInfo
+    {
+        public bool IsVirtual => Compiler.IsComptime
+            ? (Type.[Friend]Comptime_Method_GetInfo(mData.mComptimeMethodInstance).mMethodFlags & .Virtual) != 0
+            : (mData.mMethodData.[Friend]mFlags & .Virtual) != 0;
+
+        public bool IsAbstract => Compiler.IsComptime
+        	? (Type.[Friend]Comptime_Method_GetInfo(mData.mComptimeMethodInstance).mMethodFlags & .Abstract) != 0
+            : (mData.mMethodData.[Friend]mFlags & .Abstract) != 0;
+    }
+}

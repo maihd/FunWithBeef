@@ -110,3 +110,21 @@ public class NativeCppClass
     [LinkName(.CPP)]
 	public extern virtual void SayHi();
 }
+
+// Click the "Emit" button to view CppVTable methods (should be)
+// @note(maihd): I commonly comment this code because editting this file can crash IDE
+[CppVTable(typeof(NativeCppClass))]
+public interface INativeCppVTable
+{
+}
+
+// Click the "Emit" button to view BeefVTable methods
+// @note(maihd): I commonly comment this code because editting this file can crash IDE
+[BeefVTable(typeof(NativeCppClass))]
+public interface INativeBeefVTable
+{
+}
+
+struct A
+{
+}

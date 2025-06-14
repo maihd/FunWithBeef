@@ -80,8 +80,10 @@ class Program
 
         Console.WriteLine("NativeCppClass stride in Beef: {}", sizeof(NativeCppClass));
 
-		let nativeCppClass = NativeCppClass.Create();
-        defer NativeCppClass.Destroy(nativeCppClass);
+		//let nativeCppClass = NativeCppClass.Create();
+        //defer NativeCppClass.Destroy(nativeCppClass);
+
+        //INativeCppVTable nativeVTable = null;
 
         // IDE will raise exception here
         //nativeCppClass.SayHi();
