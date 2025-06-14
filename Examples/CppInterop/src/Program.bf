@@ -47,6 +47,11 @@ struct CppAlloc
     }
 }
 
+struct FuncTable
+{
+    public function void(Object) fnNoParam;
+}
+
 class Program
 {
 	[CLink]
@@ -76,7 +81,7 @@ class Program
 
         let allocator = CppAlloc();
         let nativeCppClass = new:allocator NativeCppClass();
-        //defer delete:allocator nativeCppClass; // Uncomment to if leak detector work or not -> Beef cannot track Object without BfObject fields in object
+        defer delete:allocator nativeCppClass; // Uncomment to if leak detector work or not -> Beef cannot track Object without BfObject fields in object
 
         Console.WriteLine("NativeCppClass stride in Beef: {}", sizeof(NativeCppClass));
 
@@ -90,8 +95,28 @@ class Program
 
         // Enable object access check IDE will raise exception
         nativeCppClass.Data.message = "NativeCppClass";
-        let nativeCppClassData = nativeCppClass.Data;
-        nativeCppClass.SayHi();
+        //let nativeCppClassData = nativeCppClass.Data;
+        //nativeCppClass.SayHi();
+
+        // Method pointer
+        delegate void() delSayHi = scope => nativeCppClass.SayHi;
+        function void(Object) fnSayHi = (.)delSayHi.[Friend]mFuncPtr;
+        //function void(Object) fnSayHi = (.)&nativeCppClass.SayHi;
+        Console.WriteLine("Call with nativeCppClass.SayHi method ptr");
+        fnSayHi(nativeCppClass);
+
+        
+        nativeCppClass.Data.message = "NativeCppClass after call method ptr";
+        FuncTable funcTable = .();
+        funcTable.fnNoParam = fnSayHi;
+        funcTable.fnNoParam(nativeCppClass);
+        
+        nativeCppClass.Data.message = "Called from NativeCppVFuncs";
+        NativeCppVFuncs vfuncs = .Create(nativeCppClass);
+        vfuncs.SayHi(nativeCppClass);
+
+        Console.WriteLine("nativeCppClass.SayHi ptr from delegate: {}", delSayHi.[Friend]mFuncPtr);
+        Console.WriteLine("nativeCppClass.SayHi ptr from native: {}", NativeCppClass.GetSayHiPtr());
 
         Object bfObject = nativeCppClass;
         Console.WriteLine("bfObject: {}", bfObject.ToString(..scope String()));

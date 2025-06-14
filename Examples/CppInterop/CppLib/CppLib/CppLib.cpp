@@ -107,6 +107,14 @@ __declspec(dllexport) void NativeCppClass_Destroy(NativeCppClass* nativeCppClass
     delete nativeCppClass;
 }
 
+extern "C"
+__declspec(dllexport) void* NativeCppClass_GetSayHiPtr()
+{
+    printf("NativeCppClass_GetSayHiPtr\n");
+    auto methodPtr = &NativeCppClass::SayHi;
+    return reinterpret_cast<void*&>(methodPtr);
+}
+
 
 class CppLib
 {

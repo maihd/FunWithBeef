@@ -109,6 +109,9 @@ public class NativeCppClass
 
     [LinkName(.CPP)]
 	public extern virtual void SayHi();
+    
+    [LinkName("NativeCppClass_GetSayHiPtr")]
+    public static extern void* GetSayHiPtr();
 }
 
 // Click the "Emit" button to view CppVTable methods (should be)
@@ -123,6 +126,12 @@ public interface INativeCppVTable
 [BeefVTable(typeof(NativeCppClass))]
 public interface INativeBeefVTable
 {
+}
+
+[CppVFuncs(typeof(NativeCppClass))]
+public struct NativeCppVFuncs
+{
+
 }
 
 struct A

@@ -146,6 +146,116 @@ struct CppVTableAttribute : this(Type classType), Attribute, IOnTypeInit
     }
 }
 
+[AttributeUsage(.Struct)]
+struct CppVFuncsAttribute : this(Type classType), Attribute, IOnTypeInit
+{
+    const StringView[?] BfObjectDefaultVirtualMethods = .(
+        "DynamicCastToTypeId",
+        "DynamicCastToInterface",
+        "DynamicCastToSignature",
+        "ToString",
+        "GCMarkMembers"
+    );
+
+    [Comptime]
+    public void OnTypeInit(Type selfType, Self* prev)
+    {
+        GenVFuncs(selfType, prev);
+
+        var content = new String();
+        defer delete content;
+
+        content.AppendF("\n\n");
+        content.AppendF("public static Self Create({} target)\n", classType.GetFullName(..scope String()));
+
+        content.Append("{\n");
+        content.AppendF("    Self vfuncs = .();\n\n");
+        
+        for (let method in classType.GetMethods())
+        {
+            if (!IsValidMethod(method))
+            {
+                continue;
+            }
+            
+            content.AppendF("    // {} {}", method.Name, "\n");
+            content.Append("    {\n");
+            {
+                content.AppendF("        delegate {}({}) del = scope => target.{};\n",
+                    method.ReturnType.GetFullName(..scope String()),
+                    method.GetParamsDecl(..scope String()),
+                    method.Name
+                );
+    
+                content.AppendF("        vfuncs.{0} = (.)del.[Friend]mFuncPtr;\n", method.Name);
+            }
+            content.Append("    }\n");
+        }
+        
+        content.AppendF("\n");
+        content.AppendF("    return vfuncs;\n");
+        content.Append("}\n");
+
+        Compiler.EmitTypeBody(selfType, content);
+    }
+
+    [Comptime]
+    private void GenVFuncs(Type selfType, Self* prev)
+    {
+        for (let method in classType.GetMethods())
+        {
+            if (IsValidMethod(method))
+            {
+                let funcPtrDecl = scope String();
+                funcPtrDecl.AppendF("public function {}", method.ReturnType.GetFullName(..scope String()));
+                
+                funcPtrDecl.AppendF("(");
+
+                if (classType.IsObject)
+                {
+                    funcPtrDecl.AppendF("{} self", classType.GetFullName(..scope String()));
+                }
+                else
+                {
+                    funcPtrDecl.AppendF("{}* self", classType.GetFullName(..scope String()));
+                }
+
+                let paramsDecl = method.GetParamsDecl(..scope String());
+                if (!paramsDecl.IsEmpty)
+                {
+                    funcPtrDecl.AppendF(", {}", paramsDecl);
+                } 
+
+                funcPtrDecl.AppendF(")");
+
+                funcPtrDecl.AppendF(" {};\n", method.Name);
+
+                Compiler.EmitTypeBody(selfType, funcPtrDecl);
+            }
+        }
+    }
+
+    private bool IsValidMethod(System.Reflection.MethodInfo method)
+    {
+        if (method.IsConstructor || method.IsDestructor)
+        {
+            return false;
+        }
+
+        if (method.Name.StartsWith("get__") || method.Name.StartsWith("set__"))
+        {
+            return false;
+        }
+
+        if (BfObjectDefaultVirtualMethods.Contains(method.Name))
+        {
+            return false;
+        }
+
+        return method.IsVirtual || method.IsAbstract;
+    }
+}
+
 namespace System.Reflection
 {
     extension MethodInfo
