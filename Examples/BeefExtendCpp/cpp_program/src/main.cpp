@@ -46,6 +46,8 @@ int main()
 	BfSprite* sprite = new BfSprite();
 	sprite->Draw();
 
+	delete sprite;
+
 	return 0;
 }
 

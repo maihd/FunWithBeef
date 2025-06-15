@@ -12,3 +12,7 @@
 - cpp_lib: framework library
 - cpp_generated: Beef bindings for C++ which is autogen
 - cpp_program: Main program, use Beef Library, extending Beef classes =))
+
+## Key notes
+- From C++ bindings: must be force concrete call on virtual methods to avoid cyclic calls
+- Beef Object is append in C++ object, check cpp_program

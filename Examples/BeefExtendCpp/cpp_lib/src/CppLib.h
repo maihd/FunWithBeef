@@ -35,7 +35,7 @@ public:
 class CPP_LIB_API Sprite : public Node
 {
 private:
-    std::string image = "";
+    std::string image;
 
 public:
     Sprite();

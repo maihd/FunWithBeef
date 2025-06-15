@@ -13,7 +13,7 @@ Node::Node()
 
 Node::~Node()
 {
-	printf("Node::~Node()");
+	printf("Node::~Node()\n");
 }
 
 
@@ -44,7 +44,7 @@ Sprite::Sprite()
 
 Sprite::~Sprite()
 {
-	printf("Sprite::~Sprite");
+	printf("Sprite::~Sprite()\n");
 }
 
 
@@ -63,7 +63,6 @@ void Sprite::Draw()
 
 extern "C"
 {
-
 	Node* Node_Create(void)
 	{
 		return new Node();

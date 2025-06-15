@@ -2,10 +2,27 @@ namespace BeefExtendCpp;
 
 using System;
 
+struct CppVector<T>
+{
+    // Oops, cannot read the code from C++ stdlib, so we need to create bindings that work on C++ stdlib
+    // Suggestion: bindings depends on Beef's Span
+}
+
+struct CppString
+{
+    // Oops, cannot read the code from C++ stdlib, so we need to create bindings that work on C++ stdlib
+    // Suggestion: bindings depends on Beef's StringView
+}
+
 [CRepr]
 struct CppNode
 {
     void* VTable;
+
+    float x;
+    float y;
+
+    CppVector<CppNode*> children;
 
     [LinkName("Node_Update")]
     public static extern void Update(Self* node, float dt);
@@ -17,6 +34,8 @@ struct CppNode
 [CRepr]
 struct CppSprite : CppNode
 {
+    CppString image;
+
     [LinkName("Sprite_Create")]
     public static extern Self* Create();
 
@@ -35,6 +54,13 @@ struct PlacementAlloc : this(void* memory)
     public void* Alloc(int size, int align)
     {
         return memory;
+    }
+
+    public static mixin New<T>(void* memory)
+        where T : new
+    {
+        let alloc = PlacementAlloc(memory);
+        new:alloc T()
     }
 }
 
@@ -59,11 +85,17 @@ class BfSprite : BfNode
 {
     protected CppSprite* cppSprite => (.)cppNode;
 
+    private static mixin PlacementNew(void* memory)
+    {
+
+    }
+
     [Export, LinkName("BfSprite_Ctor")]
     public static Self Ctor(CppNode* node, void* memory)
     {
-        let alloc = PlacementAlloc(memory);
-        let self = new:alloc Self();
+        Console.WriteLine("BfSprite.Ctor");
+
+        let self = PlacementAlloc.New!<Self>(memory);
         self.cppNode = node;
         return self;
     }
@@ -71,6 +103,8 @@ class BfSprite : BfNode
     [Export, LinkName("BfSprite_Dtor")]
     public static void Dtor(Self self)
     {
+        Console.WriteLine("BfSprite.Dtor");
+
         delete:null self;
     }
 
