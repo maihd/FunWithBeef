@@ -62,6 +62,11 @@ do
         "cpp_lib/src"
     }
 
+    -- Alternative: postbuildcommands in BeefExtendCpp_CppLib
+    prebuildcommands {
+        "cd " .. ROOT_DIR .. " && BeefBuild.exe"
+    }
+
     postbuildcommands {
         "xcopy " 
             .. "$(ProjectDir)\\..\\..\\build\\Debug_Win64\\BeefExtendCpp\\BeefExtendCpp.dll"
