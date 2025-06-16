@@ -55,11 +55,15 @@ do
 
     files {
         "cpp_program/src/*.h",
-        "cpp_program/src/*.cpp"
+        "cpp_program/src/*.cpp",
+
+        "cpp_generated/*.h",
+        "cpp_generated/*.cpp",
     }
 
     includedirs {
-        "cpp_lib/src"
+        "cpp_lib/src",
+        "cpp_generated",
     }
 
     -- Alternative: postbuildcommands in BeefExtendCpp_CppLib

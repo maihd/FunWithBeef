@@ -81,53 +81,38 @@ class BfNode
 }
 
 [AlwaysInclude]
+[GenCppWrapper("Sprite")]
 class BfSprite : BfNode
 {
     protected CppSprite* cppSprite => (.)cppNode;
 
-    private static mixin PlacementNew(void* memory)
+    [GenCppMethod]
+    public this(CppNode* node)
     {
-
+        this.cppNode = node;
     }
 
-    [Export, LinkName("BfSprite_Ctor")]
-    public static Self Ctor(CppNode* node, void* memory)
+    [GenCppMethod]
+    public ~this()
     {
-        Console.WriteLine("BfSprite.Ctor");
-
-        let self = PlacementAlloc.New!<Self>(memory);
-        self.cppNode = node;
-        return self;
     }
-
-    [Export, LinkName("BfSprite_Dtor")]
-    public static void Dtor(Self self)
-    {
-        Console.WriteLine("BfSprite.Dtor");
-
-        delete:null self;
-    }
-
-    [Export, LinkName("BfSprite_Update")]
-    public static void BfSprite_Update(Self self, float dt)
-    {
-        self.Update(dt);
-    }
-
-    [Export, LinkName("BfSprite_Draw")]
-    public static void BfSprite_Draw(Self self)
-    {
-        self.Draw();
-    }
-
+    
+    [GenCppMethod]
     public override void Update(float dt)
     {
         CppSprite.Update(cppSprite, dt);
     }
 
+    [GenCppMethod]
     public override void Draw()
     {
         CppSprite.Draw(cppSprite);
         Console.WriteLine("BfSprite.Draw");
     }
+}
+
+[AlwaysInclude]
+[GenCppBinds(typeof(BfSprite))]
+internal static class BfSpriteBinds
+{
 }
