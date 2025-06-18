@@ -13,7 +13,7 @@ struct GenCppBindsAttribute : this(Type targetType), Attribute, IOnTypeInit
         let typeName = targetType.GetName(..scope .());
         let typeFullName = targetType.GetFullName(.. scope .());
 
-        var ctorCount = 0; 
+        //var ctorCount = 0; 
 
         for (let method in targetType.GetMethods())
         {

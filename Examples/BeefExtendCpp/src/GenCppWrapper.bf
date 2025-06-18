@@ -4,18 +4,26 @@ using System;
 using System.IO;
 using System.Reflection;
 
-[AttributeUsage(.Class, .ReflectAttribute, ReflectUser=.Methods)]
-struct GenCppWrapperAttribute : this(String ParentClass), Attribute, IOnTypeDone
+static class GenCppWrapper
 {
-    public String TargetTypeName = null;
+    [Comptime]
+    public static void GenerateAll(StringView targetDir)
+    {
+        for (let typeDecl in Type.TypeDeclarations)
+        {
+            if (typeDecl.GetCustomAttribute<GenCppWrapperAttribute>() case .Ok(let attr))
+            {
+                Generate(typeDecl.ResolvedType, attr.ParentClass, attr.TargetTypeName, targetDir);
+            }
+        }
+    }
 
     [Comptime]
-    public void OnTypeDone(Type type, Self* prev)
+    public static void Generate(Type type, StringView parentClass, StringView targetTypeName = "", StringView targetDir = "cpp_generated")
     {
-        /* old code
-        let typeName = TargetTypeName ?? type.GetName(..scope .());
+        let typeName = !targetTypeName.IsEmpty ? targetTypeName : type.GetName(..scope .());
 
-        let targetFilePath = scope $"cpp_generated/{typeName}.h";
+        let targetFilePath = scope $"{targetDir}/{typeName}.h";
         let content = scope $$"""
             // C++ wrapper for {{typeName}}
 
@@ -37,9 +45,9 @@ struct GenCppWrapperAttribute : this(String ParentClass), Attribute, IOnTypeDone
 
             """;
 
-        if (!Directory.Exists("cpp_generated"))
+        if (!Directory.Exists(targetDir))
         {
-            Directory.CreateDirectory("cpp_generated");
+            Directory.CreateDirectory(targetDir);
         }
 
         var result = File.WriteAll(targetFilePath, .((uint8*)content.CStr(), content.Length));
@@ -47,11 +55,10 @@ struct GenCppWrapperAttribute : this(String ParentClass), Attribute, IOnTypeDone
         {
             Runtime.FatalError(scope $"Failed to written at path: {targetFilePath}");
         }
-        */
     }
 
     [Comptime]
-    void GenerateClassBody(Type type, String output)
+    private static void GenerateClassBody(Type type, String output)
     {
         let typeName = type.GetName(..scope .());
 
@@ -123,7 +130,7 @@ struct GenCppWrapperAttribute : this(String ParentClass), Attribute, IOnTypeDone
     }
 
     [Comptime]
-    void GenerateExternFuncs(Type type, String output)
+    private static void GenerateExternFuncs(Type type, String output)
     {
         let typeName = type.GetName(..scope .());
         //let typeFullName = type.GetFullName(.. scope .());
@@ -168,7 +175,7 @@ struct GenCppWrapperAttribute : this(String ParentClass), Attribute, IOnTypeDone
     }
 
     [Comptime]
-    public void GetCppMethodParamsDecl(MethodInfo method, String output)
+    private static void GetCppMethodParamsDecl(MethodInfo method, String output)
     {
         for (let i < method.ParamCount)
         {

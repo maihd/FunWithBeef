@@ -1,0 +1,9 @@
+FileVersion = 1
+Dependencies = {corlib = "*", BeefExtendCpp = "*"}
+
+[Project]
+Name = "BeefExtendCpp.Codegen"
+StartupObject = "BeefExtendCpp.Codegen.Program"
+
+[Configs.Debug.Win64]
+PostBuildCmds = ["xcopy $(ProjectDir)\\..\\projects\\vs2022\\bin\\x64\\Debug\\BeefExtendCpp_CppLib_vs2022.dll $(BuildDir) /S /Y /Q"]

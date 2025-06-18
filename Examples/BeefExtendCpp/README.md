@@ -17,4 +17,10 @@
 
 ## Key notes
 - From C++ bindings: must be force concrete call on virtual methods to avoid cyclic calls
-- Beef Object is append in C++ object, check cpp_program
+- Beef Object is append in C++ object, check cpp_generated/*.h
+- Maybe bloating memory system
+
+## TODOs
+- Generate .cpp
+- Beef attributes: mark C++ class, smarter gen wrapper
+- Complete this solution, write a PoC in Unreal

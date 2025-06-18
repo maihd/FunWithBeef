@@ -1,2 +1,5 @@
 FileVersion = 1
-Projects = {BeefExtendCpp = {Path = "."}}
+Projects = {BeefExtendCpp = {Path = "."}, "BeefExtendCpp.Codegen" = {Path = "Codegen"}}
+
+[Workspace]
+StartupProject = "BeefExtendCpp.Codegen"
