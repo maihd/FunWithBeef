@@ -1,0 +1,5 @@
+namespace BitsquidFoundation;
+
+class ScratchAllocator
+{
+}

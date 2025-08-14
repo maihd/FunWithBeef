@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Generator": {
+      "commandName": "Project",
+      "workingDirectory": "D:\\imgui-beef\\Generator"
+    }
+  }
+}

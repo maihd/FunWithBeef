@@ -59,5 +59,6 @@ Open an issue, or a discusstion.
 Meta
 ----
 Beef version: 0.43.6 nightly (>= 03/06/2025 DD/MM/YYYY)
+Platforms: Only Windows now.
 Source License: No license at all, the code is just for learning/research purposes.
 Dependencies Licenses: Find its in folder if exists.

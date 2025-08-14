@@ -1,0 +1,8 @@
+[Package]
+Name = "ImGuiImplSDL3"
+Version = "1.88.0"
+Description = "SDL3 Implementation for ImGui"
+
+[Dependencies]
+ImGui = { Path = ".." }
+SDL2 = "*"
