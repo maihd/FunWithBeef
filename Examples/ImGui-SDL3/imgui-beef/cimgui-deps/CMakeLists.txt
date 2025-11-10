@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.18)
 project(cimgui)
 
 set(CIMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../cimgui)
+set(CIMGUI_DEPS_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 #general settings
 file(GLOB IMGUI_SOURCES
@@ -12,19 +13,18 @@ file(GLOB IMGUI_SOURCES
     ${CIMGUI_DIR}/imgui/imgui_demo.cpp
     ${CIMGUI_DIR}/imgui/imgui_widgets.cpp
     ${CIMGUI_DIR}/imgui/imgui_tables.cpp
-    # ${CIMGUI_DIR}/imgui/backends/imgui_impl_glfw.h
-    # ${CIMGUI_DIR}/imgui/backends/imgui_impl_glfw.cpp
-    # ${CIMGUI_DIR}/imgui/backends/imgui_impl_opengl3.h
-    # ${CIMGUI_DIR}/imgui/backends/imgui_impl_opengl3.cpp
-    # ${CIMGUI_DIR}/imgui/backends/imgui_impl_sdl2.h
-    # ${CIMGUI_DIR}/imgui/backends/imgui_impl_sdl2.cpp
+    ${CIMGUI_DIR}/imgui/backends/imgui_impl_glfw.h
+    ${CIMGUI_DIR}/imgui/backends/imgui_impl_glfw.cpp
+    ${CIMGUI_DIR}/imgui/backends/imgui_impl_opengl3.h
+    ${CIMGUI_DIR}/imgui/backends/imgui_impl_opengl3.cpp
+    ${CIMGUI_DIR}/imgui/backends/imgui_impl_sdl2.h
+    ${CIMGUI_DIR}/imgui/backends/imgui_impl_sdl2.cpp
     ${CIMGUI_DIR}/imgui/backends/imgui_impl_sdl3.h
     ${CIMGUI_DIR}/imgui/backends/imgui_impl_sdl3.cpp
     ${CIMGUI_DIR}/imgui/backends/imgui_impl_sdlgpu3.h
     ${CIMGUI_DIR}/imgui/backends/imgui_impl_sdlgpu3.cpp
-
-    # glad/glad.h
-    # glad/glad.c
+    glad/glad.h
+    glad/glad.c
 )
 
 set(IMGUI_STATIC "no" CACHE STRING "Build as a static library")
@@ -56,7 +56,11 @@ endif (WIN32)
 
 target_include_directories(cimgui PUBLIC ${CIMGUI_DIR})
 target_include_directories(cimgui PUBLIC ${CIMGUI_DIR}/imgui)
-target_include_directories(cimgui PUBLIC ${CIMGUI_DIR}/../../SDL3-beef/dist/SDL3-3.2.14/include)
+
+target_include_directories(cimgui PUBLIC ${CIMGUI_DEPS_DIR})
+target_include_directories(cimgui PUBLIC ${CIMGUI_DEPS_DIR}/SDL2/include)
+target_include_directories(cimgui PUBLIC ${CIMGUI_DEPS_DIR}/SDL3/include)
+
 set_target_properties(cimgui PROPERTIES PREFIX "")
 target_link_libraries(cimgui ${IMGUI_LIBRARIES})
 

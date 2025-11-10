@@ -1,9 +1,0 @@
-FileVersion = 1
-Dependencies = { corlib = "*", SDL3 = "*", ImGui = "*" }
-
-[Project]
-Name = "ImGuiImplSDL3GPU"
-DefaultNamespace = "ImGui"
-
-[Configs.Debug.Win64]
-LibPaths = [ "$(ProjectDir)/../dist/$(Configuration)-$(Platform)/cimgui.lib" ]

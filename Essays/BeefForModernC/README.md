@@ -11,7 +11,7 @@ Usable system language can be completed without C interop, because of its stable
 
 Struct are pass-by-values, plain old datas
 ------------------------------------------
-[Struct in Beef](https://www.beeflang.org/docs/language-guide/datatypes/#structs) are similar to C, the main difference is have difference layout, but can mark [CRepr] to make full C compatible. The goods is struct can have methods, properties, operators overloading helping work with struct easier (but should limit to what are really needed to contains in struct). Please not Struct in Beef members is not public accessible by default.
+[Struct in Beef](https://www.beeflang.org/docs/language-guide/datatypes/#structs) are similar to C, the main difference is have difference layout, but can mark `[CRepr]` to make full C compatible. The goods is struct can have methods, properties, operators overloading helping work with struct easier (but should limit to what are really needed to contains in struct). Please note that struct in Beef members is not public accessible by default.
 
 ```Beef
 [CRepr]
@@ -22,6 +22,13 @@ struct Vector3
     public float z;
 }
 ```
+
+Struct abilities:
+- Plain old data, even contains fields with type of a class. Because Beef always store class in reference (underlying is pointer).
+- Fields are private access by default
+- Can have methods, properties, operators overloading
+- Doesn't have same memory layout as C, need `[CRepr]`
+- Can inherit from other struct, but cannot have virtual methods
 
 
 Fixed-sized primitives in language level

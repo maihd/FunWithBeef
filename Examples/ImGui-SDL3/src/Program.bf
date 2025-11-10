@@ -63,12 +63,12 @@ class Program
 
 		ImGuiImplSDL3.InitForSDLGPU(window);
 		
-		ImGuiImplSDL3GPU.InitInfo initInfo = .{
+		ImGuiImplSDLGPU3.InitInfo initInfo = .{
 			Device = gpuDevice,
 			ColorTargetFormat = SDL_GetGPUSwapchainTextureFormat(gpuDevice, window),
 			MSAASamples = .SDL_GPU_SAMPLECOUNT_1
 		};
-		ImGuiImplSDL3GPU.Init(&initInfo);
+		ImGuiImplSDLGPU3.Init(&initInfo);
 
 		bool done = false;
 		while (!done)
@@ -85,7 +85,7 @@ class Program
 				}
 			}
 
-			ImGuiImplSDL3GPU.NewFrame();
+			ImGuiImplSDLGPU3.NewFrame();
 			ImGuiImplSDL3.NewFrame();
 			ImGui.NewFrame();
 
@@ -106,7 +106,7 @@ class Program
 			}
 
 			// This is mandatory: call ImGui_ImplSDLGPU3_PrepareDrawData() to upload the vertex/index buffer!
-			ImGuiImplSDL3GPU.PrepareDrawData(draw_data, commandBuffer);
+			ImGuiImplSDLGPU3.PrepareDrawData(draw_data, commandBuffer);
 
 			SDL_GPUColorTargetInfo targetInfo = .{
 				clear_color = .{ r = 0, g = 0, b = 0, a = 1.0f },
@@ -120,7 +120,7 @@ class Program
 
 			SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass(commandBuffer, &targetInfo, 1, null);
 
-			ImGuiImplSDL3GPU.RenderDrawData(draw_data, commandBuffer, renderPass);
+			ImGuiImplSDLGPU3.RenderDrawData(draw_data, commandBuffer, renderPass);
 			SDL_EndGPURenderPass(renderPass);
 
 			// Update and Render additional Platform Windows
@@ -134,7 +134,7 @@ class Program
 		}
 
 		SDL_WaitForGPUIdle(gpuDevice);
-		ImGuiImplSDL3GPU.Shutdown();
+		ImGuiImplSDLGPU3.Shutdown();
 		ImGuiImplSDL3.Shutdown();
 
 		SDL_ReleaseWindowFromGPUDevice(gpuDevice, window);

@@ -1,5 +1,5 @@
 FileVersion = 1
-Projects = {ImGui-SDL3 = {Path = "."}, SDL3 = {Path = "SDL3-Beef"}, ImGui = {Path = "imgui-beef"}, ImGuiImplSDL3 = {Path = "imgui-beef/ImGuiImplSDL3"}, ImGuiImplSDL3GPU = {Path = "imgui-beef/ImGuiImplSDL3GPU"}}
+Projects = {ImGui-SDL3 = {Path = "."}, SDL3 = {Path = "SDL3-Beef"}, ImGui = {Path = "imgui-beef"}, ImGuiImplSDL3 = {Path = "imgui-beef/ImGuiImplSDL3"}, ImGuiImplSDLGPU3 = {Path = "imgui-beef/ImGuiImplSDLGPU3"}}
 
 [Workspace]
 StartupProject = "ImGui-SDL3"
