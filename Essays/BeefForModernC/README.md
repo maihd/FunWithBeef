@@ -30,6 +30,21 @@ Struct abilities:
 - Doesn't have same memory layout as C, need `[CRepr]`
 - Can inherit from other struct, but cannot have virtual methods
 
+Anonymous Inline Type Declarations
+----------------------------------
+C support this through extensions (all major compilers). Beef have support this from nightly build 1/6/2025.
+```
+[Union]
+struct Vec2
+{
+    public float[2] coords;
+    public struct
+    {
+        public float x;
+        public float y;
+    };
+}
+```
 
 Fixed-sized primitives in language level
 ----------------------------------------
