@@ -9,6 +9,7 @@ zig-cache
 BeefSpace_User.toml
 
 .vs
+.vscode
 x64
 Debug
 Release
