@@ -2,11 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-
+using AOT;
 using UnityEngine;
 
-class TestScript : MonoBehaviour
+unsafe class TestScript : MonoBehaviour
 {
+    public GameObject prefab;
+
+    static GameObject sPrefab;
+
 #if UNITY_EDITOR
 
     // Handle to the C++ DLL
@@ -53,9 +57,8 @@ class TestScript : MonoBehaviour
 		dlclose(libraryHandle);
 	}
  
-	public static T GetDelegate<T>(
-		IntPtr libraryHandle,
-		string functionName) where T : class
+	public static T GetDelegate<T>(IntPtr libraryHandle, string functionName) 
+        where T : class
 	{
 		IntPtr symbol = dlsym(libraryHandle, functionName);
 		if (symbol == IntPtr.Zero)
@@ -113,16 +116,16 @@ class TestScript : MonoBehaviour
     }
 
 #else
- 
-	[DllImport("UnityScripting")]
-	static extern void Init(
-		IntPtr gameObjectNew,
-		IntPtr gameObjectGetTransform,
-		IntPtr transformSetPosition);
- 
-	[DllImport("UnityScripting")]
-	static extern void MonoBehaviourUpdate();
- 
+
+    [DllImport("UnityScripting")]
+    static extern void Init(
+        IntPtr gameObjectNew,
+        IntPtr gameObjectGetTransform,
+        IntPtr transformSetPosition);
+
+    [DllImport("UnityScripting")]
+    static extern void MonoBehaviourUpdate();
+
 #endif
 
     delegate int GameObjectNewDelegate();
@@ -132,16 +135,22 @@ class TestScript : MonoBehaviour
         int thisHandle,
     Vector3 position);
 
+    delegate IntPtr GameObjectNewPtrDelegate();
+    delegate IntPtr GameObjectGetTransformPtrDelegate(IntPtr ptr);
+    delegate void TransformSetPositionPtrDelegate(IntPtr ptr, Vector3 position);
+
 #if UNITY_EDITOR_OSX
-	const string LIB_PATH = "/UnityScripting.bundle/Contents/MacOS/UnityScripting";
+	const string LIB_PATH = "/UnityScripting.bundle/Contents/MacOS/UnityScriptingAAA";
 #elif UNITY_EDITOR_LINUX
-	const string LIB_PATH = "/Beef/UnityScripting.so";
+	const string LIB_PATH = "/Beef/UnityScriptingAAA.so";
 #elif UNITY_EDITOR_WIN
-    const string LIB_PATH = "/Beef/UnityScripting.dll";
+    const string LIB_PATH = "/Beef/UnityScriptingAAA.dll";
 #endif
 
     void Awake()
     {
+        sPrefab = prefab;
+
 #if UNITY_EDITOR
 
         // Open native library
@@ -159,14 +168,14 @@ class TestScript : MonoBehaviour
         ObjectStore.Init(1024);
         Init(
             Marshal.GetFunctionPointerForDelegate(
-                new GameObjectNewDelegate(
-                    GameObjectNew)),
+                new GameObjectNewPtrDelegate(
+                    GameObjectNewPtr)),
             Marshal.GetFunctionPointerForDelegate(
-                new GameObjectGetTransformDelegate(
-                    GameObjectGetTransform)),
+                new GameObjectGetTransformPtrDelegate(
+                    GameObjectGetTransformPtr)),
             Marshal.GetFunctionPointerForDelegate(
-                new TransformSetPositionDelegate(
-                    TransformSetPosition)));
+                new TransformSetPositionPtrDelegate(
+                    TransformSetPositionPtr)));
     }
 
     void Update()
@@ -188,7 +197,7 @@ class TestScript : MonoBehaviour
 
     static int GameObjectNew()
     {
-        GameObject go = new GameObject();
+        GameObject go = Instantiate(sPrefab);
         return ObjectStore.Store(go);
     }
 
@@ -203,5 +212,66 @@ class TestScript : MonoBehaviour
     {
         Transform thiz = (Transform)ObjectStore.Get(thisHandle);
         thiz.position = position;
+    }
+
+    [MonoPInvokeCallback(typeof(GameObjectNewPtrDelegate))]
+    static IntPtr GameObjectNewPtr()
+    {
+        GameObject go = Instantiate(sPrefab);
+        return ToPointer(go);
+    }
+
+    [MonoPInvokeCallback(typeof(GameObjectGetTransformPtrDelegate))]
+    static IntPtr GameObjectGetTransformPtr(IntPtr ptr)
+    {
+        GameObject thiz = FromPointer<GameObject>(ptr);
+        Transform transform = thiz.transform;
+        return ToPointer(transform);
+    }
+
+    [MonoPInvokeCallback(typeof(TransformSetPositionPtrDelegate))]
+    static void TransformSetPositionPtr(IntPtr ptr, Vector3 position)
+    {
+        Transform thiz = FromPointer<Transform>(ptr);
+        thiz.position = position;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    struct PointerWrapper<T>
+    {
+        public T data;
+    }
+
+    static object[] tempArray = new object[1];
+
+    static IntPtr* arrayPtr = (IntPtr*)Marshal.UnsafeAddrOfPinnedArrayElement(tempArray, 0);
+
+    public static IntPtr ToPointer(object obj)
+    {
+        unsafe
+        {
+            // var wrapper = new PointerWrapper<T>
+            // {
+            //     data = obj
+            // };
+            // var wrapperPtr = &wrapper;
+            // return *(IntPtr*)wrapperPtr;
+
+            tempArray[0] = obj;
+            var objPtr = arrayPtr[0];
+            return objPtr;
+        }
+    }
+
+    public static T FromPointer<T>(IntPtr ptr)
+    {
+        unsafe
+        {
+            // var wrapper = *(PointerWrapper<T>*)&ptr;
+            // return wrapper.data;
+
+            arrayPtr[0] = ptr;
+            return (T)tempArray[0];
+        }
     }
 }

@@ -24,11 +24,12 @@ struct Vector3
 ```
 
 Struct abilities:
-- Plain old data, even contains fields with type of a class. Because Beef always store class in reference (underlying is pointer).
+- Plain old data (and always), even contains fields with type of a class. Because Beef always store class in reference (underlying is pointer).
 - Fields are private access by default
-- Can have methods, properties, operators overloading
+- Can have methods, properties, operators overloading. But still keep that struct is PoD.
 - Doesn't have same memory layout as C, need `[CRepr]`
-- Can inherit from other struct, but cannot have virtual methods
+- Can inherit from other struct, but cannot have virtual methods. But still keep that struct is PoD.
+- Can have constructors, converters
 
 Anonymous Inline Type Declarations
 ----------------------------------

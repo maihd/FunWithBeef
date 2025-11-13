@@ -1,0 +1,5 @@
+namespace UnityScripting;
+
+class UnityBridge
+{
+}
