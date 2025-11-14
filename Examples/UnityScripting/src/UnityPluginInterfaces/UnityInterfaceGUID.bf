@@ -14,4 +14,4 @@ public struct UnityInterfaceGUID
 		this.high = high;
 		this.low = low;
 	}
-}
+} 

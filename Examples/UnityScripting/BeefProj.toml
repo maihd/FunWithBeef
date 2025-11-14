@@ -8,7 +8,6 @@ DefaultNamespace = "UnityScripting"
 
 [Configs.Debug.Win64]
 BuildKind = "DynamicLib"
-TargetName = "$(ProjectName)Beef"
 CLibType = "Static"
 BeefLibType = "Static"
 PostBuildCmds = ["CopyFilesIfNewer(\"$(TargetDir)/$(ProjectName).dll\", \"$(ProjectDir)/Assets/Beef\")"]
