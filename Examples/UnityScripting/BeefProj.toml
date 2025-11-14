@@ -1,12 +1,14 @@
 FileVersion = 1
 
 [Project]
-Name = "UnityScripting"
+Name = "UnityScriptingBeef"
 TargetType = "BeefLib"
 StartupObject = "UnityScripting.Program"
+DefaultNamespace = "UnityScripting"
 
 [Configs.Debug.Win64]
 BuildKind = "DynamicLib"
+TargetName = "$(ProjectName)Beef"
 CLibType = "Static"
 BeefLibType = "Static"
 PostBuildCmds = ["CopyFilesIfNewer(\"$(TargetDir)/$(ProjectName).dll\", \"$(ProjectDir)/Assets/Beef\")"]

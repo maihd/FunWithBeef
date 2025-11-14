@@ -48,13 +48,14 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.2.8f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\NativeExports\LoggerExports.cs" />
     <Compile Include="Assets\Scripts\TestScript.cs" />
     <Compile Include="Assets\Scripts\Utils\ObjectStore.cs" />
     <Compile Include="Assets\Scripts\Utils\DylibHelper.cs" />
-    <Compile Include="Assets\Scripts\PointerLibExtensions.cs" />
+    <Compile Include="Assets\Scripts\Utils\PtrUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Beef\UnityScriptingAAA.dll" />
+    <None Include="Assets\Beef\UnityScriptingBeef.dll" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -21,3 +21,13 @@ Based on https://www.jacksondunstan.com/articles/3938.
 - Finish your game
 - Upgrade your framework, create features to help make game faster, better
 - Repeat
+
+## Solutions
+- You need glue code, glue runtime to make C# and Beef work togethers
+- Use object store and output handle to native side
+- Use object pointer
+- Marshalling function pointer from delegate and vice versa
+- Directly use function pointer in C#
+- Fast data marshalling use C struct layout (required):
+    - C# side: StructLayoutAttribute
+    - Beef side: CRepr
