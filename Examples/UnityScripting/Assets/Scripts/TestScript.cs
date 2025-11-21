@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using AOT;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
-class TestScript : MonoBehaviour
+public class TestScript : MonoBehaviour
 {
     public GameObject prefab;
 
@@ -15,7 +16,7 @@ class TestScript : MonoBehaviour
 #if UNITY_EDITOR
 
     // Handle to the C++ DLL
-    public IntPtr libraryHandle;
+    static IntPtr libraryHandle;
 
     public delegate void InitDelegate(
         IntPtr gameObjectNew,
@@ -30,12 +31,20 @@ class TestScript : MonoBehaviour
         TransformSetPositionFnPtr transformSetPosition);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    delegate void MonoBehaviourUpdateFnPtr();
+    delegate void MonoBehaviourUpdateFnPtr(IntPtr BeefyObject);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    delegate IntPtr MonoBehaviourCreateFnPtr();
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    delegate void MonoBehaviourDestroyFnPtr(IntPtr BeefyObject);
 
     public delegate void MonoBehaviourUpdateDelegate();
 
-    MonoBehaviourUpdateFnPtr MonoBehaviourUpdate;
-
+    static InitDelegateFnPtr        Init;
+    static MonoBehaviourUpdateFnPtr MonoBehaviourUpdate;
+    static MonoBehaviourCreateFnPtr MonoBehaviourCreate;
+    static MonoBehaviourDestroyFnPtr MonoBehaviourDestroy;
 #endif
 
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
@@ -49,8 +58,13 @@ class TestScript : MonoBehaviour
         TransformSetPositionFnPtr transformSetPosition);
 
     [DllImport("UnityScriptingBeef")]
-    static extern void MonoBehaviourUpdate();
+    static extern void MonoBehaviourUpdate(IntPtr BeefyObject);
 
+    [DllImport("UnityScriptingBeef")]
+    static extern IntPtr MonoBehaviourCreate();
+
+    [DllImport("UnityScriptingBeef")]
+    static extern void MonoBehaviourDestroy(IntPtr BeefyObject);
 #endif
 
     delegate int GameObjectNewDelegate();
@@ -81,22 +95,41 @@ class TestScript : MonoBehaviour
     const string LIB_PATH = "/Beef/UnityScriptingBeef.dll";
 #endif
 
-    void Awake()
+    private IntPtr BeefyObject;
+
+    
+
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
+    private static void LoadFunctions()
     {
-        sPrefab = prefab;
-
 #if UNITY_EDITOR
-
         // Open native library
         libraryHandle = DylibHelper.OpenLibrary(Application.dataPath + LIB_PATH);
-        // InitDelegate Init = GetDelegateFromNative<InitDelegate>(
-        //     libraryHandle,
-        //     "Init");
+        
+        MonoBehaviourCreate = DylibHelper.GetFnPtrFromNative<MonoBehaviourCreateFnPtr>(libraryHandle, "MonoBehaviourCreate");
+        MonoBehaviourDestroy = DylibHelper.GetFnPtrFromNative<MonoBehaviourDestroyFnPtr>(libraryHandle, "MonoBehaviourDestroy");
+
         MonoBehaviourUpdate = DylibHelper.GetFnPtrFromNative<MonoBehaviourUpdateFnPtr>(libraryHandle, "MonoBehaviourUpdate");
 
-        var Init = DylibHelper.GetFnPtrFromNative<InitDelegateFnPtr>(libraryHandle, "Init");
+        Init = DylibHelper.GetFnPtrFromNative<InitDelegateFnPtr>(libraryHandle, "Init");
 
+        Action<PlayModeStateChange> handle = null;
+        handle = (state) =>
+        {
+            if (state == PlayModeStateChange.EnteredEditMode) 
+            {
+                EditorApplication.playModeStateChanged += handle;
+
+                DylibHelper.CloseLibrary(libraryHandle);
+                libraryHandle = IntPtr.Zero;
+            }
+        };
+
+        EditorApplication.playModeStateChanged += handle;
 #endif
+
+        Init(LoggerExports.DebugLog, GameObjectNewPtr, GameObjectGetTransformPtr, TransformSetPositionPtr);
 
         // Below code is naive implemented version
         // Init C++ library
@@ -111,21 +144,23 @@ class TestScript : MonoBehaviour
         //     Marshal.GetFunctionPointerForDelegate(
         //         new TransformSetPositionPtrDelegate(
         //             TransformSetPositionPtr)));
+    }
 
-        Init(LoggerExports.DebugLog, GameObjectNewPtr, GameObjectGetTransformPtr, TransformSetPositionPtr);
+    void Awake()
+    {
+        sPrefab = prefab;
+
+        BeefyObject = MonoBehaviourCreate();
     }
 
     void Update()
     {
-        MonoBehaviourUpdate();
+        MonoBehaviourUpdate(BeefyObject);
     }
 
-    void OnApplicationQuit()
+    void OnDestroy()
     {
-#if UNITY_EDITOR
-        DylibHelper.CloseLibrary(libraryHandle);
-        libraryHandle = IntPtr.Zero;
-#endif
+        MonoBehaviourDestroy(BeefyObject);
     }
 
     ////////////////////////////////////////////////////////////////

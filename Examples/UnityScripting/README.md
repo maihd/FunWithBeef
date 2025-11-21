@@ -31,3 +31,18 @@ Based on https://www.jacksondunstan.com/articles/3938.
 - Fast data marshalling use C struct layout (required):
     - C# side: StructLayoutAttribute
     - Beef side: CRepr
+- Fast iterations using dynamic serialization with JSON and Custom Editor:
+    - Create a custom type store json and dictionary
+        - JsonStr field store as string, can be serialized by Unity
+        - Fields/Objects to do coding editor logic
+    - Create a custom type store schema information of json structure
+    - Create a custom editor to handle editting data, load and save in json
+- Memory managements:
+    - Object return to C#, should be use custom allocator, to avoid Leak Detector complains
+- Bindings:
+    - Another tricky problem
+    - We must use dynamic loading in editor:
+        - Once DLL loaded on by Editor, its cannot be unload
+        - Dynamic loading help you do hot reload
+    - We must provide C ABI to export Beef functions that can call from C#
+    - We must convert C# functions to Function Pointer, and pass to Beef plugin init function
