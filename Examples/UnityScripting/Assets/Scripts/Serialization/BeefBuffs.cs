@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using UnityEditor;
 using UnityEngine;
 
 [Serializable]
 public class BeefBuffs
 {
     [SerializeField]
-    private string schemaName;
+    public string schemaName;
 
     [SerializeField]
     public byte[] Data;
@@ -42,6 +41,37 @@ public class BeefBuffs
         }
     }
 
+    public void SyncSchema(BeefSchema schema)
+    {
+        if (Fields == null)
+        {
+            Fields = new Dictionary<string, object>();
+        }
+
+        if (Objects == null)
+        {
+            Objects = new List<UnityEngine.Object>();
+        }
+
+        foreach (var field in schema.Fields)
+        {
+            if (Fields.ContainsKey(field.Name))
+            {
+                continue;
+            }
+
+            if (field.IsRef)
+            {
+                Objects.Add((UnityEngine.Object)field.DefaultValue);
+                Fields.Add(field.Name, Objects.Count - 1);
+            }
+            else
+            {
+                Fields.Add(field.Name, field.DefaultValue);
+            }
+        }
+    }
+
     public void UpdateSchema(BeefSchema schema)
     {
         if (!(schemaName != schema.Name || Fields == null))
@@ -51,15 +81,6 @@ public class BeefBuffs
 
         Schema = schema;
         schemaName = schema.Name;
-
-        // keys = new List<string>();
-        // values = new List<object>();
-
-        // foreach (var field in schema.Fields)
-        // {
-        //     keys.Add(field.Name);
-        //     values.Add(field.DefaultValue);
-        // }
 
         Fields = new Dictionary<string, object>();
         foreach (var field in schema.Fields)
@@ -80,27 +101,11 @@ public class BeefBuffs
 
     public void SetField(string path, object value)
     {
-        // for (int i = 0; i < keys.Count; i++)
-        // {
-        //     if (keys[i] == path)
-        //     {
-        //         values[i] = value;
-        //         break;
-        //     }
-        // }
         Fields[path] = value;
     }
 
     public object GetField(string path)
     {
-        // for (int i = 0; i < keys.Count; i++)
-        // {
-        //     if (keys[i] == path)
-        //     {
-        //         return values[i];
-        //     }
-        // }
-
         if (Fields.TryGetValue(path, out var value))
         {
             return value;
@@ -111,15 +116,6 @@ public class BeefBuffs
 
     public void SetUnityObject(string path, UnityEngine.Object value)
     {
-        // for (int i = 0; i < keys.Count; i++)
-        // {
-        //     if (keys[i] == path)
-        //     {
-        //         values[i] = value;
-        //         break;
-        //     }
-        // }
-
         if (Fields.TryGetValue(path, out var index))
         {
             Objects[(int)(long)index] = value;
@@ -128,14 +124,6 @@ public class BeefBuffs
 
     public UnityEngine.Object GetUnityObject(string path)
     {
-        // for (int i = 0; i < keys.Count; i++)
-        // {
-        //     if (keys[i] == path)
-        //     {
-        //         return values[i];
-        //     }
-        // }
-
         if (Fields.TryGetValue(path, out var index))
         {
             return Objects[(int)(long)index];
@@ -146,28 +134,6 @@ public class BeefBuffs
 
     public void PopulateJson()
     {
-        // var jsonObject = "{";
-        
-        // int count = 0;
-        // foreach (var field in Schema.Fields)
-        // {
-        //     if (count > 0)
-        //     {
-        //         jsonObject += ",";
-        //     }
-
-        //     switch (field.Type)
-        //     {
-        //         case "int":
-        //             int valueInt = (int)GetField(field.Name);
-        //             jsonObject += $"\"{field.Name}\": {valueInt}";
-        //             break;
-        //     }
-
-        //     count++;
-        // }
-
-        // JsonStr = jsonObject + "}";
         JsonStr = Fields != null ? JsonConvert.SerializeObject(Fields) : "";
     }
 
@@ -183,7 +149,6 @@ public class BeefBuffs
 
     public void PopulateData()
     {
-        // int offset = 0;
         var bytes = new List<byte>();
 
         foreach (var field in Schema.Fields)
@@ -223,11 +188,4 @@ public class BeefBuffs
             }
         }
     }
-}
-
-[Serializable]
-public struct BeefInjection
-{
-    public UnityEngine.Object   Object;
-    public Type                 Type;
 }

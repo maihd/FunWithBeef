@@ -6,3 +6,6 @@
 
 /*.sln
 /*.csproj
+
+/*_generated
+/Assets/*_generated

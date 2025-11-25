@@ -1,5 +1,5 @@
 FileVersion = 1
-Projects = {UnityScriptingBeef = {Path = "."}}
+Projects = {UnityScriptingBeef = {Path = "."}, "UnityScriptingBeef.Builder" = {Path = "Builder"}}
 
 [Workspace]
-StartupProject = "UnityScriptingBeef"
+StartupProject = "UnityScriptingBeef.Builder"

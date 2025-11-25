@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -39,6 +40,9 @@ public static class BeefSchemaRegistry
     [InitializeOnLoadMethod]
     private static void SetupDefaultSchemas()
     {
+        Debug.Log("Reloading default schemas");
+        Debug.Log("Get type by string: " + Assembly.GetAssembly(typeof(UnityEngine.Object)).GetType("UnityEngine.Texture"));
+
         Schemas["int"] = new()
         {
             Name = "int",
@@ -75,9 +79,17 @@ public static class BeefSchemaRegistry
                 new()
                 {
                     Name = "Value",
-                    Type = "TestScript",
+                    Type = "UnityEngine.Texture",
                     IsRef = true,
                     DefaultValue = null
+                },
+                
+                new()
+                {
+                    Name = "Rate",
+                    Type = "float",
+                    IsRef = false,
+                    DefaultValue = 0.0f
                 }
             }
         };

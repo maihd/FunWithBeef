@@ -1,5 +1,9 @@
 using UnityEngine;
 using UnityEditor;
+using System;
+using System.CodeDom;
+using Unity.VisualScripting;
+using System.Reflection;
 
 [CustomEditor(typeof(BeefSerializer))]
 public class BeefSerializerEditor : Editor
@@ -13,24 +17,46 @@ public class BeefSerializerEditor : Editor
         // var injectedObject = serializer.Injection.Object as TestScript;
         // injectedObject = EditorGUILayout.ObjectField("Object as TestScript", injectedObject, typeof(TestScript), true) as TestScript;
 
-        if (serializer.Buffs.Schema != null)
+        var schema = BeefSchemaRegistry.FindSchema(serializer.Buffs.schemaName);
+        if (schema != null)
         {
-            foreach (var field in serializer.Buffs.Schema.Fields)
+            serializer.Buffs.SyncSchema(schema);
+
+            foreach (var field in schema.Fields)
             {
                 switch (field.Type)
                 {
                     case "int":
                     {
-                        var input = (int)(long)serializer.Buffs.GetField(field.Name);
+                        var input = Convert.ToInt32(serializer.Buffs.GetField(field.Name));
                         var result = EditorGUILayout.IntField(field.Name, input);
                         serializer.Buffs.SetField(field.Name, result);
                         break;
                     }
 
-                    case "TestScript":
+                    case "float":
                     {
-                        var input = serializer.Buffs.GetUnityObject(field.Name) as TestScript;
-                        var result = EditorGUILayout.ObjectField(field.Name, input, typeof(TestScript), true);
+                        var input = Convert.ToSingle(serializer.Buffs.GetField(field.Name));
+                        var result = EditorGUILayout.FloatField(field.Name, input);
+                        serializer.Buffs.SetField(field.Name, result);
+                        break;
+                    }
+
+                    default:
+                    {
+                        var type = Assembly.GetAssembly(typeof(UnityEngine.Object)).GetType(field.Type);
+                        if (type == null)
+                        {
+                            break;
+                        }
+
+                        var input = serializer.Buffs.GetUnityObject(field.Name);
+                        if (!type.IsInstanceOfType(input))
+                        {
+                            input = null;
+                        }
+
+                        var result = EditorGUILayout.ObjectField(field.Name, input, type, true);
                         serializer.Buffs.SetUnityObject(field.Name, result);
                         break;
                     }
@@ -42,9 +68,6 @@ public class BeefSerializerEditor : Editor
             EditorGUILayout.LabelField("No Schema");
         }
 
-        // EditorGUILayout.PropertyField(serializedObject.FindProperty("Buffs").FindPropertyRelative("Data"));
-        // serializedObject.ApplyModifiedProperties();
-
         serializer.Buffs.PopulateJson();
 
         GUILayout.Label("Json");
@@ -52,11 +75,10 @@ public class BeefSerializerEditor : Editor
 
         if (GUILayout.Button("Update Schema"))
         {
-            var schema = BeefSchemaRegistry.FindSchema("Test2");
-            serializer.Buffs.UpdateSchema(schema);
+            var newSchema = BeefSchemaRegistry.FindSchema("Test2");
+            serializer.Buffs.UpdateSchema(newSchema);
         }
 
-        // serializer.Injection.Object = injectedObject;
         serializedObject.Update();
     }
 } 

@@ -28,8 +28,8 @@ Based on https://www.jacksondunstan.com/articles/3938.
 - Use object pointer
 - Marshalling function pointer from delegate and vice versa
 - Directly use function pointer in C#
-- Fast data marshalling use C struct layout (required):
-    - C# side: StructLayoutAttribute
+- Fast data marshalling use C struct layout (required, blittable type):
+    - C# side: StructLayoutAttribute and pointer
     - Beef side: CRepr
 - Fast iterations using dynamic serialization with JSON and Custom Editor:
     - Create a custom type store json and dictionary
@@ -37,6 +37,7 @@ Based on https://www.jacksondunstan.com/articles/3938.
         - Fields/Objects to do coding editor logic
     - Create a custom type store schema information of json structure
     - Create a custom editor to handle editting data, load and save in json
+- Auto codegen C# class wrapper, use existed Unity serialization and property system
 - Memory managements:
     - Object return to C#, should be use custom allocator, to avoid Leak Detector complains
 - Bindings:

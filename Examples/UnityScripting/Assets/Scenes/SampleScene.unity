@@ -119,6 +119,52 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &456938832
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 456938834}
+  - component: {fileID: 456938833}
+  m_Layer: 0
+  m_Name: BeefComponent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &456938833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456938832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b559e258bfe14545864b2433cef7393, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BeefComponent
+  CharacterName: hehe
+  Level: 0
+--- !u!4 &456938834
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456938832}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.33658, y: 22.32806, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -243,7 +289,7 @@ MonoBehaviour:
   Buffs:
     schemaName: Test2
     Data: 
-    JsonStr: '{"Value":0}'
+    JsonStr: '{"Value":0,"Rate":12345.0}'
     Schema:
       Name: Test2
       IsRef: 1
@@ -252,9 +298,7 @@ MonoBehaviour:
         Type: TestScript
         IsRef: 1
     Objects:
-    - {fileID: 2135191217}
-  Injection:
-    Object: {fileID: 0}
+    - {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!4 &1085755828
 Transform:
   m_ObjectHideFlags: 0
@@ -322,3 +366,4 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 2135191218}
   - {fileID: 1085755828}
+  - {fileID: 456938834}

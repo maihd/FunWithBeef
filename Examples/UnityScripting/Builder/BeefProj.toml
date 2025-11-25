@@ -1,0 +1,7 @@
+FileVersion = 1
+Dependencies = {corlib = "*", UnityScriptingBeef = "*"}
+
+[Project]
+Name = "UnityScriptingBeef.Builder"
+StartupObject = "UnityScripting.Builder.Program"
+DefaultNamespace = "UnityScripting.Builder"

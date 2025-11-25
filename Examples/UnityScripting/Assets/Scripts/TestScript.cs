@@ -50,20 +50,23 @@ public class TestScript : MonoBehaviour
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
 #elif UNITY_EDITOR_WIN
 #else
-    [DllImport("UnityScriptingBeef")]
+    // private const string LIB_PATH = "__Internal";
+    private const string LIB_PATH = "UnityScriptingBeef";
+
+    [DllImport(LIB_PATH)]
     static extern void Init(
         LoggerExports.DebugLogFnPtr log,
         GameObjectNewFnPtr gameObjectNew,
         GameObjectGetTransformFnPtr gameObjectGetTransform,
         TransformSetPositionFnPtr transformSetPosition);
 
-    [DllImport("UnityScriptingBeef")]
+    [DllImport(LIB_PATH)]
     static extern void MonoBehaviourUpdate(IntPtr BeefyObject);
 
-    [DllImport("UnityScriptingBeef")]
+    [DllImport(LIB_PATH)]
     static extern IntPtr MonoBehaviourCreate();
 
-    [DllImport("UnityScriptingBeef")]
+    [DllImport(LIB_PATH)]
     static extern void MonoBehaviourDestroy(IntPtr BeefyObject);
 #endif
 

@@ -16,29 +16,7 @@ public struct NativeStringViewUtf8
             return string.Empty;
         }
 
-        var encoding = Encoding.GetEncoding("utf-8");
-
-        unsafe
-        {
-            // Create a ReadOnlySpan<byte> from the byte*
-            ReadOnlySpan<byte> byteSpan = new ReadOnlySpan<byte>((byte*)data, (int)length);
-
-            // Get the number of characters required for the string
-            int charCount = encoding.GetCharCount(byteSpan);
-
-            // Allocate a char array to hold the decoded characters
-            char[] charBuffer = new char[charCount];
-
-            // Use a fixed statement to get a pointer to the charBuffer
-            fixed (char* charPtr = charBuffer)
-            {
-                // Decode the bytes into the char buffer
-                encoding.GetChars(byteSpan, new Span<char>(charPtr, charCount));
-            }
-
-            // Create a string from the char array
-            return new string(charBuffer);
-        }
+        return Marshal.PtrToStringUTF8(data, (int)length);
     }
 }
 
