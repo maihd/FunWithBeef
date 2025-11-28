@@ -2,6 +2,8 @@ Yolo Principles
 ===============
 Making your game take time, if you thinks too much about principles, so you do nothing about game, you just think about your own principles. So the first and ultimate principles is "there no principles, make your game!".
 
+> This is old docs of my ideas before I known about Beef
+
 
 Some advices I learn from id Software principles
 ------------------------------------------------
