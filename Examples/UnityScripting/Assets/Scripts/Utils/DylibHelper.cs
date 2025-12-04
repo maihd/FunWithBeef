@@ -84,6 +84,11 @@ public static class DylibHelper
     public static T GetDelegateFromNative<T>(IntPtr libraryHandle, string functionName)
         where T : class
     {
+        if (libraryHandle == IntPtr.Zero)
+        {
+            throw new Exception("Unloaded library");
+        }
+        
         IntPtr symbol = GetProcAddress(libraryHandle, functionName);
         if (symbol == IntPtr.Zero)
         {
@@ -97,6 +102,11 @@ public static class DylibHelper
 
     public static T GetFnPtrFromNative<T>(IntPtr libraryHandle, string functionName)
     {
+        if (libraryHandle == IntPtr.Zero)
+        {
+            throw new Exception("Unloaded library");
+        }
+
         IntPtr symbol = GetProcAddress(libraryHandle, functionName);
         if (symbol == IntPtr.Zero)
         {

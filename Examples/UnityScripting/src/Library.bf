@@ -47,55 +47,6 @@ class Transform
 {
 }
 
-public class BeefBehaviour
-{
-	int numCreated;
-	Vector3 position;
-
-	int goHandle;
-	int transformHandle;
-
-	public this()
-	{
-		numCreated = 0;
-
-		//if (UnityPluginEntry.IsLoaded)
-		//{
-		//	numCreated -= 5;
-		//}
-
-		goHandle = GameObjectNew();
-
-		transformHandle = GameObjectGetTransform(goHandle);
-		TransformSetPosition(transformHandle, position);
-	}
-
-	public virtual void Update()
-	{
-		DebugLog("MonoBehaviourUpdate in Beef!");
-
-		if (numCreated < 5)
-		{
-			//int32 goHandle = GameObjectNew();
-			//int32 transformHandle = GameObjectGetTransform(goHandle);
-
-			/*int goHandle = GameObjectNew();
-			int transformHandle = GameObjectGetTransform(goHandle);
-
-			float comp = (float)numCreated;
-			Vector3 position = .() { x = comp, y = comp, z = comp };
-			TransformSetPosition(transformHandle, position);
-			numCreated++;*/
-		}
-
-		float comp = 0.01f;
-		position += .{ x = comp, y = comp, z = comp };
-
-		// int transformHandle = GameObjectGetTransform(goHandle);
-		TransformSetPosition(transformHandle, position);
-	}
-}
-
 static
 {
 	static UnityAllocator Allocator;
@@ -118,6 +69,7 @@ struct UnityAllocator
 	}
 }
 
+
 class Library
 {
 	[Export, CLink]
@@ -128,25 +80,5 @@ class Library
 
 		GameObjectGetTransform = fnGameObjectGetTransform;
 		TransformSetPosition = fnTransformSetPosition;
-	}
-
-	[Export, CLink]
-	public static BeefBehaviour MonoBehaviourCreate()
-	{
-		DebugLog("Create BeefBehaviour");
-		return new:Allocator BeefBehaviour();
-	}
-
-	[Export, CLink]
-	public static void MonoBehaviourDestroy(BeefBehaviour behaviour)
-	{
-		DebugLog("Destroy BeefBehaviour");
-		delete:Allocator behaviour;
-	}
-
-	[Export, CLink]
-	public static void MonoBehaviourUpdate(BeefBehaviour behaviour)
-	{
-		behaviour.Update();
 	}
 }

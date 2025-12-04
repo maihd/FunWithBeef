@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// We dont ObjectStore anymore
+// We dont use ObjectStore anymore
 // We can directly use object pointer now, if safe on UnityObject (already pinned from Unity Engine)
 // public static class ObjectStore
 // {

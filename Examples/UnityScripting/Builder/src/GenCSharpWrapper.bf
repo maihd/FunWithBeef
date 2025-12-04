@@ -30,6 +30,11 @@ static class GenCSharpWrapper
             // This code is auto-generated, donot editting
             // C# wrapper for {{typeName}}
 
+            using System;
+            using System.Runtime.InteropServices;
+
+            using UnityEngine;
+
             {{GenerateExternFuncs(type, ..scope .())}}
 
             public class {{typeName}} : {{parentClass}}
@@ -82,8 +87,7 @@ static class GenCSharpWrapper
 				modifiers = "public";
 			}
 
-            let typeFullName = field.FieldType.GetFullName(.. scope .());
-            let csharpType = GetCSharpType(typeFullName);
+            let csharpType = GetCSharpType(field.FieldType, ..scope String());
             
             output.Append(scope
 			    $$"{{modifiers}} {{csharpType}} {{field.Name}};\n    "
@@ -96,18 +100,29 @@ static class GenCSharpWrapper
         ("System.String", "string"),
         ("System.StringView", "string"),
         ("int", "int"),
-        ("uint", "uint"),
+        ("uint", "uint"), 
+    } ~ {
+        Console.WriteLine("Destroying TypeMappings...");
+        delete TypeMappings;
     };
 
     [Comptime]
-    private static StringView GetCSharpType(StringView input)
+    private static void GetCSharpType(Type type, String output)
     {
-        if (TypeMappings.TryGetValue(input, let result))
+        if (type.GetCustomAttribute<UnityTypeAttribute>() case .Ok(let attr) && !String.IsNullOrEmpty(attr.Name))
         {
-            return result;
+            output.Clear();
+            output.Append(attr.Name);
+            return;
         }
 
-        return input;
+        let typeFullName = type.GetFullName(..output);
+        if (TypeMappings.TryGetValue(typeFullName, let result))
+        {
+            output.Clear();
+            output.Append(result);
+            return;
+        }
     }
 
     [Comptime]
@@ -117,6 +132,26 @@ static class GenCSharpWrapper
 
         for (let method in type.GetMethods())
         {
+            if (method.Name == "Start")
+            {
+                output.Append(scope $$"""
+                    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+                    delegate void {{typeName}}_{{method.Name}}_Delegate(IntPtr ptr);
+
+                    static {{typeName}}_{{method.Name}}_Delegate {{typeName}}_{{method.Name}};
+
+                    void {{method.Name}}()
+                    {
+                        if ({{typeName}}_{{method.Name}} == null)
+                        {
+                            {{typeName}}_{{method.Name}} = BeefLibs.GetFnPtrFromNative<{{typeName}}_{{method.Name}}_Delegate>("{{typeName}}_{{method.Name}}");
+                        }
+
+                        {{typeName}}_{{method.Name}}(IntPtr.Zero);
+                    }
+                """);
+            }
+
             if (method.GetCustomAttribute<UnityScripting.UnityExportAttribute>() case .Ok(let attr)) 
             {
                 if (method.IsConstructor)

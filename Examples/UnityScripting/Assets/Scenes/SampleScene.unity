@@ -119,6 +119,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &302289057
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 302289059}
+  - component: {fileID: 302289058}
+  m_Layer: 0
+  m_Name: BeefBehaviour
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &302289058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302289057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 962f936831a8874468cfe580d19027f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BeefBehaviour
+--- !u!4 &302289059
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302289057}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.33658, y: 22.32806, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &456938832
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,7 +179,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &456938833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,8 +192,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b559e258bfe14545864b2433cef7393, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BeefComponent
-  CharacterName: hehe
-  Level: 0
 --- !u!4 &456938834
 Transform:
   m_ObjectHideFlags: 0
@@ -330,7 +372,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2135191217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343,7 +385,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91be6b06965b2bd4c96e7f81e840b208, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 966094416050380240, guid: 600308f5147d3ee4e81d2653f8f76f6d, type: 3}
 --- !u!4 &2135191218
 Transform:
   m_ObjectHideFlags: 0
@@ -367,3 +408,4 @@ SceneRoots:
   - {fileID: 2135191218}
   - {fileID: 1085755828}
   - {fileID: 456938834}
+  - {fileID: 302289059}
