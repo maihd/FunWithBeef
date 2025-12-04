@@ -1,0 +1,20 @@
+= Introduction
+Comparing Beef with Unreal C++ (language, compiler, runtime, coding style).
+
+== Comparison Table
+[cols=3]
+|===
+| Language 
+| Beef 
+| Unreal C++
+
+| Design Goals 
+| Simplicity
+
+Good for game development 
+
+| Complex
+
+Focus on Game development
+
+|===

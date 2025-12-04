@@ -6,8 +6,11 @@ By [design](https://www.beeflang.org/docs/foreward/), Beef values simplicity, co
 
 First of all, Beef easily interop C code
 ----------------------------------------
-Usable system language can be completed without C interop, because of its stable ABI (maybe claim as standard), and many existing libraries and frameworks written on it. So from the beginning, Beef chose this path, make sure it have good [C interop support](https://www.beeflang.org/docs/language-guide/interop/). And now that a main features to make program with Beef. You can call C function without the need of PInvoke, can pass struct by value or pointer without any conversion, C-like array, calling convention, and so on. Sections below will talking about how to use Modern C coding style apply to Beef, without the need of OOP features. This essays can be used for programmer starting Beef with C background.
-> Note: runtime of Beef and C only have minor differences, both compile with LLVM (if C is compiled with Clang). Also in Windows, Beef may use MSVC to generate code (basically support by LLVM). So, use Beef instead of C for high level that still have same working program may have benefits.
+Usable system language can be completed without C interop, because of its stable ABI (maybe claim as standard), and many existing libraries and frameworks written on it. So from the beginning, Beef chose this path, make sure it have good [C interop support](https://www.beeflang.org/docs/language-guide/interop/). And now that a main features to make program with Beef. You can call C function without the need of PInvoke, can pass struct by value or pointer without any conversion, C-like array, calling convention, and so on. Sections below will talking about how to use Modern C coding style apply to Beef, without the need of OOP features. 
+> Note 1: This essays can be used for programmer starting Beef with C background. Including successors of C: Zig, Odin,...
+> Note 2: Use this docs to understand C and create your bindings are recommend. Because Beef need C ABI to righ ecosystem game development libraries. And game library are moving to use Modern C for implementations. Modern C libraries are easy to design, maintains and controllable performance.
+> Note 3: runtime of Beef and C only have minor differences, both compile with LLVM (if C is compiled with Clang). Also in Windows, Beef may use MSVC to generate code (basically support by LLVM). So, use Beef instead of C for high level that still have same working program may have benefits.
+
 
 Struct are pass-by-values, plain old datas
 ------------------------------------------
@@ -31,6 +34,7 @@ Struct abilities:
 - Can inherit from other struct, but cannot have virtual methods. But still keep that struct is PoD.
 - Can have constructors, converters
 
+
 Anonymous Inline Type Declarations
 ----------------------------------
 C support this through extensions (all major compilers). Beef have support this from nightly build 1/6/2025.
@@ -46,6 +50,7 @@ struct Vec2
     };
 }
 ```
+
 
 Fixed-sized primitives in language level
 ----------------------------------------
