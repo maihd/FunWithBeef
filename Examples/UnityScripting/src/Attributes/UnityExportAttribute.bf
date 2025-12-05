@@ -15,6 +15,19 @@ public struct UnityExportAttribute : CReprAttribute, IOnTypeInit
     [Comptime]
     private void GenCode(Type type)
     {
+        if (true)
+        {
+            Compiler.EmitTypeBody(type, scope $$"""
+                public static void CallCtor(void* ptr)
+                {
+                    DebugLog("Calling ctor of {{type.GetFullName(..scope .())}}");
+
+                    PNAlloc.Ctor<{{type.GetName(..scope .())}}>(ptr);
+                }
+    
+            """);
+        }
+
         let methodNames = StringView[?]("Awake", "Start", "Update", "Fixed", "LateUpdate");
         for (let methodName in methodNames)
         {

@@ -2,6 +2,7 @@ namespace UnityScripting;
 
 using System;
 using System.Interop;
+using System.Collections;
 
 struct PNAlloc : this(void* ptr)
 {
@@ -27,7 +28,8 @@ struct PNAlloc : this(void* ptr)
 }
 
 [CRepr]
-public class BeefBehaviour
+[UnityType(Name = "BeefBehaviour")]
+public abstract class BeefBehaviour : Object
 {
     private void HandleUnityAwake()
     {
@@ -50,14 +52,28 @@ public class BeefBehaviour
 	}
 
 #region Unity Events
-    protected virtual void CallCtor()
+    private static Dictionary<uint64, function void(void*)> Ctors = new .() ~ { delete Ctors; Ctors = null; };
+
+    public static void RegisterConstructor(uint64 typeId, function void(void*) ctor)
     {
-        PNAlloc.Ctor(this);
+        if (!Ctors.ContainsKey(typeId))
+        {
+            Ctors.Add(typeId, ctor);
+        }
+    }
+
+    public static void CallCtor(uint64 typeId, void* ptr)
+    {
+        if (Ctors.TryGetValue(typeId, let func))
+        {
+            func(ptr);
+        }
+
+        //PNAlloc.Ctor<BeefBehaviour>(ptr);
     }
 
     protected virtual void OnAwake()
     {
-        
     }
 
     protected virtual void OnDestroy()
@@ -77,11 +93,11 @@ public class BeefBehaviour
     [Export]
     [AlwaysInclude]
     [CallingConvention(.Stdcall), LinkName("BeefBehaviourAwake")]
-    private static void UnityExports_Awake(BeefBehaviour behaviour)
+    private static void UnityExports_Awake(BeefBehaviour behaviour, uint64 typeId)
     {
         DebugLog("UnityExports_Awake");
 
-        PNAlloc.Ctor(behaviour);
+        CallCtor(typeId, Internal.UnsafeCastToPtr(behaviour));
         behaviour.HandleUnityAwake();
     }
     

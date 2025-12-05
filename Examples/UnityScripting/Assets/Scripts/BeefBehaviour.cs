@@ -5,17 +5,17 @@ using System.Runtime.InteropServices;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
-[StructLayout(LayoutKind.Sequential, Pack = 8)]
-public class BeefBehaviour : MonoBehaviour
+[StructLayout(LayoutKind.Sequential, Pack = 4)]
+public abstract class BeefBehaviour : MonoBehaviour
 {
-    private IntPtr BeefPtr;
-    private IntPtr BeefMeta0;
-    private IntPtr BeefMeta1;
-    private IntPtr BeefMeta2;
-    private IntPtr BeefMeta3;
+    protected IntPtr BeefPtr;
+    protected IntPtr BeefMeta0;
+    protected IntPtr BeefMeta1;
+
+    protected virtual ulong BeefTypeId => 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Awake()
+    protected virtual void Awake()
     {
         var field0 = GetType().GetField(nameof(BeefMeta0), BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance);
         Debug.Log(field0);
@@ -27,28 +27,28 @@ public class BeefBehaviour : MonoBehaviour
         var address = (IntPtr)((long)PtrUtils.ToPointer(this) + (long)offset0);
         BeefPtr = address;
 
-        BeefBehaviourAwake(BeefPtr);
+        BeefBehaviourAwake(BeefPtr, BeefTypeId);
     }
 
-    void Start()
+    protected virtual void Start()
     {
         BeefBehaviourStart(BeefPtr);
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         BeefBehaviourUpdate(BeefPtr);
     }
 
-    void OnDestroy()
+    protected virtual void OnDestroy()
     {
         BeefBehaviourOnDestroy(BeefPtr);
     }
 
 #if UNITY_EDITOR
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    delegate IntPtr BeefBehaviourAwakeFnPtr(IntPtr BeefyObject);
+    delegate IntPtr BeefBehaviourAwakeFnPtr(IntPtr BeefyObject, ulong BeefTypeId);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     delegate void BeefBehaviourOnDestroyFnPtr(IntPtr BeefyObject);

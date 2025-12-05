@@ -69,12 +69,15 @@ struct UnityAllocator
 	}
 }
 
-
+[BeefBehaviourRegistry]
 class Library
 {
 	[Export, CLink]
 	public static void Init(FnDebugLog fnLog, FnGameObjectNew fnGameObjectNew, FnGameObjectGetTransform fnGameObjectGetTransform, FnTransformSetPosition fnTransformSetPosition)
 	{
+        // Register BeefBehaviour constructors
+        RegisterBeefBehaviours();
+
 		DebugLog = fnLog;
 		GameObjectNew = fnGameObjectNew;
 

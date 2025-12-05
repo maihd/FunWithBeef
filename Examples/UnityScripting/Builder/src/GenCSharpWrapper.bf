@@ -14,7 +14,13 @@ static class GenCSharpWrapper
         {
             if (typeDecl.GetCustomAttribute<UnityScripting.UnityExportAttribute>() case .Ok(let attr))
             {
-                Generate(typeDecl.ResolvedType, typeDecl.BaseType.GetFullName(..scope String()), "", targetDir);
+                var parentClass = typeDecl.BaseType.GetFullName(..scope String());
+                if (typeDecl.BaseType.GetCustomAttribute<UnityTypeAttribute>() case .Ok(let unityType))
+                {
+                    parentClass = unityType.Name;
+                }
+
+                Generate(typeDecl.ResolvedType, parentClass, "", targetDir);
             }
         }
     }
@@ -35,13 +41,13 @@ static class GenCSharpWrapper
 
             using UnityEngine;
 
-            {{GenerateExternFuncs(type, ..scope .())}}
-
             public class {{typeName}} : {{parentClass}}
             {
-                {{GenerateClassFields(type, ..scope .())}}
+                protected override ulong BeefTypeId => {{(int32)type.TypeDeclaration.TypeId}};
 
-                {{GenerateClassBody(type, ..scope .())}}
+                {{GenerateCSharpClassFields(type, ..scope .())}}
+
+                {{GenerateCSharpClassBody(type, ..scope .())}}
             };
             """;
 
@@ -58,7 +64,7 @@ static class GenCSharpWrapper
     }
 
 	[Comptime]
-	private static void GenerateClassFields(Type type, String output)
+	private static void GenerateCSharpClassFields(Type type, String output)
 	{
 	    for (let field in type.GetFields())
 	    {
@@ -99,8 +105,19 @@ static class GenCSharpWrapper
     {
         ("System.String", "string"),
         ("System.StringView", "string"),
-        ("int", "int"),
-        ("uint", "uint"), 
+        ("int8", "sbyte"),
+        ("uint8", "byte"), 
+        ("int16", "short"),
+        ("uint16", "ushort"),
+        ("int32", "int"),
+        ("uint32", "uint"), 
+        ("int64", "long"),
+        ("uint64", "ulong"),
+        ("int", "IntPtr"),
+        ("uint", "UIntPtr"), 
+        ("char8", "byte"), 
+        ("char16", "char"),
+        ("char32", "int"), 
     } ~ {
         Console.WriteLine("Destroying TypeMappings...");
         delete TypeMappings;
@@ -126,32 +143,12 @@ static class GenCSharpWrapper
     }
 
     [Comptime]
-    private static void GenerateClassBody(Type type, String output)
+    private static void GenerateCSharpClassBody(Type type, String output)
     {
         let typeName = type.GetName(..scope .());
 
         for (let method in type.GetMethods())
         {
-            if (method.Name == "Start")
-            {
-                output.Append(scope $$"""
-                    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-                    delegate void {{typeName}}_{{method.Name}}_Delegate(IntPtr ptr);
-
-                    static {{typeName}}_{{method.Name}}_Delegate {{typeName}}_{{method.Name}};
-
-                    void {{method.Name}}()
-                    {
-                        if ({{typeName}}_{{method.Name}} == null)
-                        {
-                            {{typeName}}_{{method.Name}} = BeefLibs.GetFnPtrFromNative<{{typeName}}_{{method.Name}}_Delegate>("{{typeName}}_{{method.Name}}");
-                        }
-
-                        {{typeName}}_{{method.Name}}(IntPtr.Zero);
-                    }
-                """);
-            }
-
             if (method.GetCustomAttribute<UnityScripting.UnityExportAttribute>() case .Ok(let attr)) 
             {
                 if (method.IsConstructor)
@@ -191,7 +188,7 @@ static class GenCSharpWrapper
                 {
                     output.Append(scope
                         $$"""
-                            {{modifiers}} void {{method.Name}}({{GetCppMethodParamsDecl(method, ..scope .())}})
+                            {{modifiers}} void {{method.Name}}({{GetCSharpMethodParamsDecl(method, ..scope .())}})
                             {
                                 {{typeName}}_{{method.Name}}(buffer, {{method.GetArgsList(..scope .())}});
                             }
@@ -204,7 +201,7 @@ static class GenCSharpWrapper
                 {
                     output.Append(scope
                         $$"""
-                            {{modifiers}} void {{method.Name}}({{GetCppMethodParamsDecl(method, ..scope .())}})
+                            {{modifiers}} void {{method.Name}}({{GetCSharpMethodParamsDecl(method, ..scope .())}})
                             {
                                 {{typeName}}_{{method.Name}}(buffer);
                             }
@@ -218,52 +215,7 @@ static class GenCSharpWrapper
     }
 
     [Comptime]
-    private static void GenerateExternFuncs(Type type, String output)
-    {
-        let typeName = type.GetName(..scope .());
-        //let typeFullName = type.GetFullName(.. scope .());
-
-        //var ctorCount = 0;
-
-
-        //output.Append(scope $$"struct {{externTypeName}};\n");
-
-        for (let method in type.GetMethods())
-        {
-            if (!method.HasCustomAttribute<UnityScripting.UnityExportAttribute>())
-            {
-                continue;
-            }
-
-            if (method.IsConstructor)
-            {
-                let paramsDecl = method.ParamCount > 0
-                    ? scope $"(void* memory, {GetCppMethodParamsDecl(method, ..scope .())})"
-                    : scope $"(void* memory)";
-
-                output.Append(scope $$"extern \"C\" __declspec(dllimport) void* {{typeName}}_Ctor{{paramsDecl}};\n");
-                continue;
-            }
-
-            if (method.IsDestructor)
-            {
-                output.Append(scope $$"extern \"C\" __declspec(dllimport) void {{typeName}}_Dtor(void* self);\n");
-                continue;
-            }
-
-            if (method.ParamCount > 0)
-            {
-                output.Append(scope $$"extern \"C\" __declspec(dllimport) void {{typeName}}_{{method.Name}}(void* self, {{GetCppMethodParamsDecl(method, ..scope .())}});\n");
-            }
-            else
-            {
-                output.Append(scope $$"extern \"C\" __declspec(dllimport) void {{typeName}}_{{method.Name}}(void* self);\n");
-            }
-        }
-    }
-
-    [Comptime]
-    private static void GetCppMethodParamsDecl(MethodInfo method, String output)
+    private static void GetCSharpMethodParamsDecl(MethodInfo method, String output)
     {
         for (let i < method.ParamCount)
         {
