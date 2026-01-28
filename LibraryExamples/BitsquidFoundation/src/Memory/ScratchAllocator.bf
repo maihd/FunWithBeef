@@ -1,5 +1,5 @@
 namespace BitsquidFoundation;
 
-class ScratchAllocator
+public class ScratchAllocator
 {
 }

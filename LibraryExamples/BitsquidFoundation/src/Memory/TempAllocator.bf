@@ -1,5 +1,5 @@
-namespace BitsquidFoundation.Memory;
+namespace BitsquidFoundation;
 
-class TempAllocator
+public class TempAllocator
 {
 }

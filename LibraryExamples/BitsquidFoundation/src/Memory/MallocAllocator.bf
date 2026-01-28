@@ -1,5 +1,5 @@
-namespace BitsquidFoundation.Memory;
+namespace BitsquidFoundation;
 
-class MallocAllocator
+public class MallocAllocator
 {
-}
+}    
