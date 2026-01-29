@@ -42,3 +42,14 @@ Cons:
 - Still growing by double size, but we can change this behaviour
 - Lack of data structures
 - No virtual methods, mean that we can change behaviours of existing functions, but we should avoid that in mindset of Bitsquid Foundation
+
+## Things need to concerns
+- Memory operations was contained as `System.Internal`
+- Make sure understanding `strideof` vs `sideof`
+- Beef data system are differences from C++:
+    - `struct` have no destructor
+    - No copy operator
+    - Const correctness are opposite: `struct` fields in methods are immutable by default, we need add `mut` after function signature, like we put `const` in C++ methods
+- Beef generics are better than C++ template
+    - Support type constraints
+    - Compiler will checking compile errors even the type have not been used
