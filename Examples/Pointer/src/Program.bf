@@ -2,6 +2,7 @@ namespace Pointer;
 
 using System;
 
+
 public class Data
 {
 	public uint unused = 0;
@@ -11,6 +12,7 @@ public class Data
 		Console.WriteLine("Hello world!");
 	}
 }
+
 
 public struct InplaceAlloc
 {
@@ -47,6 +49,7 @@ public static class PointerCast
 	}
 }
 
+
 public static class Program
 {
 	public static void Main()
@@ -56,7 +59,7 @@ public static class Program
 
         void* dataPtr = Internal.StdMalloc(typeof(Data).InstanceStride); // This works, show class in Beef have the concept of instance type
                                                                          // and in conclusion, sizeof/strideof only use for value type
-		defer Internal.StdFree(dataPtr);
+		defer Internal.StdFree(dataPtr); // Internal.StdFree will be called after out-of-scope
 
 		Data data = PointerCast.Cast<Data>(dataPtr);
 		data.Hello();
@@ -76,14 +79,15 @@ public static class Program
         Console.WriteLine("First int of array: {}", arrayObjectPtr[0]);     // This will print address of mClassVData
         Console.WriteLine("Second int of array: {}", arrayObjectPtr[1]);    // This will print value mDebugFlags or arrayObject.Count
         Console.WriteLine("Third int of array: {}", arrayObjectPtr[2]);     // This will print value arrayObject.Count or first item value
+        Console.WriteLine();
 
         // Fixed array reverse engineering
-
-        int[10] array = default; // Notes: cannot new int[10], if you want dynamic allocations fixed size array, use pointer or span
+        //int[10] array = default; // Notes: cannot new int[10], if you want dynamic allocations fixed size array, use pointer or span
         Console.WriteLine("Size of array: {}", sizeof(int[10]));
         Console.WriteLine("Stride of array: {}", strideof(int[10]));
         Console.WriteLine("InstanceSize of array: {}", typeof(int[10]).InstanceSize);
         Console.WriteLine("InstanceStride of array: {}", typeof(int[10]).InstanceStride);
+        Console.WriteLine();
 
         // Span reverse engineering
 
@@ -99,7 +103,11 @@ public static class Program
         Console.WriteLine("InstanceSize of span: {}", typeof(Span<int>).InstanceSize);
         Console.WriteLine("InstanceStride of span: {}", typeof(Span<int>).InstanceStride);
 
+        Console.WriteLine("Span have data structure like this: struct Span { void* data; int length; }");
+        Console.WriteLine();
+
         /* END OF PROGRAM */
+        Console.WriteLine("Press any key exit...");
         Console.Read();
 	}
 }
