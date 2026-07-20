@@ -8,8 +8,17 @@ First of all, Beef easily interop C code
 ----------------------------------------
 Usable system language can be completed without C interop, because of its stable ABI (maybe claim as standard), and many existing libraries and frameworks written on it. So from the beginning, Beef chose this path, make sure it have good [C interop support](https://www.beeflang.org/docs/language-guide/interop/). And now that a main features to make program with Beef. You can call C function without the need of PInvoke, can pass struct by value or pointer without any conversion, C-like array, calling convention, and so on. Sections below will talking about how to use Modern C coding style apply to Beef, without the need of OOP features. 
 > Note 1: This essays can be used for programmer starting Beef with C background. Including successors of C: Zig, Odin,...
-> Note 2: Use this docs to understand C and create your bindings are recommend. Because Beef need C ABI to righ ecosystem game development libraries. And game library are moving to use Modern C for implementations. Modern C libraries are easy to design, maintains and controllable performance.
+> Note 2: Use this docs to understand C and create your bindings are recommend. Because Beef need C ABI to rich ecosystem game development libraries. And game library are moving to use Modern C for implementations. Modern C libraries are easy to design, maintains and controllable performance.
 > Note 3: runtime of Beef and C only have minor differences, both compile with LLVM (if C is compiled with Clang). Also in Windows, Beef may use MSVC to generate code (basically support by LLVM). So, use Beef instead of C for high level that still have same working program may have benefits.
+
+
+Why use ModernC in Beef
+-----------------------
+- Better C interop
+- Pure data-oriented and procedural programming
+- Higher performance, and cache effiency
+- You like simplicity
+- Just for fun
 
 
 Struct are pass-by-values, plain old datas
@@ -56,25 +65,28 @@ Fixed-sized primitives in language level
 ----------------------------------------
 In Modern C program, we were encouraged to use fixed-size primitives, but will to include headers, and no one will use the same name of fixed-size primitives, sometime `uint32_t`, sometime `u32`. But Beef so this problem by simply provide fixed-size primitives in language level. The tables below compare name-to-name from Beef to C.
 
-| Beef   | Beef C Interop | C                  | C stdint.h |
-|--------|----------------|--------------------|------------|
-| int8   | c_char         | char               | int8_t     |
-| uint8  | c_uchar        | unsigned char      | uint8_t    |
-| int16  | c_short        | short              | int16_t    |
-| uint16 | c_ushort       | unsigned short     | uint16_t   |
-| int32  | c_int          | int                | int32_t    |
-| uint32 | c_uchar        | unsigned int       | uint32_t   |
-| int64  | c_longlong     | long long          | int64_t    |
-| uint64 | c_ulonglong    | unsigned long long | uint64_t   |
-| float  | float          | float              | float      |
-| double | double         | double             | double     |
+| Beef      | Beef C Interop    | C primitives          | C stdint.h/stddef.h    |
+|-----------|-------------------|-----------------------|------------------------|
+| int       | c_intptr          | <os bitness base>     | intptr_t, ssize_t      |
+| uint      | c_uintptr         | <os bitness base>     | uintptr_t              |
+| uint      | c_size            | <os bitness base>     | size_t                 |
+| int8      | c_char            | char                  | int8_t                 |
+| uint8     | c_uchar           | unsigned char         | uint8_t                |
+| int16     | c_short           | short                 | int16_t                |
+| uint16    | c_ushort          | unsigned short        | uint16_t               |
+| int32     | c_int             | int                   | int32_t                |
+| uint32    | c_uchar           | unsigned int          | uint32_t               |
+| int64     | c_longlong        | long long             | int64_t                |
+| uint64    | c_ulonglong       | unsigned long long    | uint64_t               |
+| float     | float             | float                 | float                  |
+| double    | double            | double                | double                 |
 
 > Updated 12/06/2025: Beef C types required `using System.Interop` from new versions (>= 0.43.5).
 
 
 Modern C encourage use values over pointers
 -------------------------------------------
-Beef by design based on C# syntax, which struct pass-by-value default. And Beef support optimize pass-by-value, which is will use SIMD register when available. Modern C compiler can do its as well. Beef also support expressions block (in C only have on GCC/Clang).
+Beef by design based on C# syntax, which struct pass-by-value default. And Beef support optimize pass-by-value, which is will use SIMD register when available. Modern C compiler can do its as well. Beef also support expressions block (in C only have on GCC/Clang). `struct`/`enum` in Beef are purely PoD.
 ```Beef
 Console.WriteLine("Result={}",
     {
@@ -166,11 +178,48 @@ Vector3Add(.(x: 1.0f, y: 2.0f, z: 3.0f));
 Pointers
 --------
 Pointers is the most important concept in C, but come with hard to understanding and using. Maybe only true for beginners, when the programmers meet experiences that needed to influent C programming, pointer become the handy features. It's still a unsafe features, must use with care. In old standard of C, for performance reason, pointers maybe overuse in many cases. In the modern C standards, new compiler with many tricks to optimized code when compiling, pointers may be avoided. Modern C encourage pass-by-value, also pass-by-reference cannot be avoided overtimes. User defined array types still need pointers. Come with this problem, Beef provide good support for pointers, with `ref`/`out` when you only need pass-by-reference. This come handy when interop C code, also port C code to Beef when needed. Lastly, written Modern C style in Beef more easily.
+Supported features to avoid use pointer as parameters:
+- `in`/`out`/`inout` modifier (useful when bindings C function have pointer parameters, but with better semantic)
+- Parameter are immutable by default, so compile can we optimize passing the struct value around, no need pointer to avoid overhead when calling function
+- `Span<T>`/`StringView` for better semantic working with array/buffer data
 
 
 Pointer arithmetic
 ------------------
 Unlike C, in Beef, we cannot cast pointer to `int` or other value type. And unlike C++, we cannot cast `this` to pointer (`this` is value type, not a pointer), but we can use `Internal.UnsafeCastToPtr(this)` to get `void*` pointer. Fortunately, we can do pointer arithmetic. Just use `uint8*` to increase/decrease the address of the pointer. That how I do stack allocations.
+
+
+Array, List, Span
+-----------------
+Array in C, but in my view, they are just pure buffer, with can be know as compile-time for size, or use pointer combine with variable for storing size. Which is come with flaws and headaches for programmers:
+- No difference from array and pointer in C
+- No bounds check (maybe some compiler have extensions, but not in design of C)
+- When reading code, we usually must findout what the type of variables or paramaters are pointer or array
+
+Beef provide some features help working with array better:
+- Fixed size array like C, worked exactly liked C
+- Pointer as array like C, for interop and unsafe memory works
+- Span, wrapper of Pointer + Length
+- Array object, like C#. Because like C#, array object can have muliple dimensions
+- List, dynamic-size, growable-size array (like C#)
+```Beef
+/* Allocates a float array class */
+float[] floatArr = new float[3];
+
+/* Allocates a 2D float array class */
+float[,] floatArr2D = new float[3, 2];
+
+/* This is a fixed-size array, which is much like a tuple with four values */
+float[4] sizedFloatArr = .(100, 200, 300, 400);
+int[?] inferredSizeArr = .(500, 600);
+let inferredSizeArr2 = int[?](700, 800, 900);
+
+/* A span is a ptr/size value type pair */
+Span<float> floatSpan = floatArr;
+
+/* Raw pointer. The "*" at the end denotes a raw array allocation rather than a float[] object */
+float* floatPtr = new float[3]*;
+```
 
 
 Centralized Memory Management
@@ -203,14 +252,16 @@ But Beef solve this problem by just copying the enum of Rust, cook its into C# s
 - Enum can have methods
 - Enum can be extended like C, but more strict typing
 - Enum can custom underlying type
+- Enum member can have shorthand access with prefix `.`
 
 Tuples is just anounymous struct, construct with parens. Not must things to said about it, but this can help when you need return multiple values without using dangerous pointer or too verbose `ref`/`out` modifiers. And in for each loop, when dictionary-like enumerator return pair, no need to defining new type.
 
 Unlike C# and C++, C does not support exception. To handling errors, we have 2 common modern solutions:
-- Return boolean, and log error messages
+- Return boolean or int or enum, and log error messages
 - Return a error result struct
 
 But in Beef we have enum as tagged union, so just famous `Result<T, V>` data structure. The problem solved. But in some form of problems, return boolean or default values and log error messages are more appreciated. Raylib does that, and many systems do that, take a read for more details: https://www.rfleury.com/p/the-easiest-way-to-handle-errors
+One more good api is multiple returns (tuple as return type), make the code is more easy to understand, but not a widely used idioms in Beef.
 
 
 Namespaces and modules
@@ -218,9 +269,19 @@ Namespaces and modules
 In C there are no concrete concepts of namespaces and modules. To solve this problem, we are prefer to use prefix as namespaces/modules name. Beef is C# syntax with C++, so there are no brainer it supported namespaces by default. But prefix solution have one advantages, that modules can be easily add extensions. But Beef have one features that help with that. Based on C# `partial`, but more openness and more freedom, which is call `extension`.
 
 
+Building and project organization
+---------------------------------
+Beef inherit building and project organization just like C#. But for more easier settings configurations, they use toml. By using this approach, we can avoid headache about setting up compiler, building scripts, project organization too (which is scale by each platform we choose).
+
+
+Platform specified and conditional compilation
+----------------------------------------------
+Beef have subset of C preprocessor (exactly is C# preprocessor, which have no textual macros) for conditional compiling. But attributes can be used, and make the code more easier to read. Links: https://www.beeflang.org/docs/language-guide/preprocessor/
+
+
 Metaprogramming & Code generations
 ----------------------------------
-C widely use textual macros. And in modern C, it will be more used. Like stb_array, stb_ds, which help to create generic type container data structures. C _Generics commly use to create constructors. Beef support all this without needed of headache textual macros, like Mixin, Generic. And in C, you will find sometime need code generation with simple DSL to avoid spoilate code. But with Beef, we dont need another DSL or codegen tools, all come with language features. Links: https://www.beeflang.org/docs/language-guide/comptime.
+C widely use textual macros. And in modern C, it will be more used. Like stb_array, stb_ds, which help to create generic type container data structures. C _Generics commonly use to create constructors. Beef support all this without needed of headache textual macros, like Mixin, Generic. And in C, you will find sometime need code generation with simple DSL to avoid boilerplate code. But with Beef, we dont need another DSL or codegen tools, all come with language features. Links: https://www.beeflang.org/docs/language-guide/comptime.
 
 
 Comptime
@@ -237,9 +298,19 @@ C have no RAII. So programmer need to cleanup the resources manually. This is no
 > **_NOTE:_** This is the hack I used to make AutoRelease/FrameAllocations/TempAllocations.
 
 
+Typealias
+---------
+C cannot lacks of `typedef` (which is require for platfom-specified code, common in gamedev), Beef support it with keyword `typealias`
+```Beef
+typealias Size = int;
+typealias Collection<T> = List<T>;
+typealias StringLookup = Dictionary<String, String>;
+```
+
+
 Math/VectorMath, SIMD, Operators Overloading
 --------------------------------------------
-Coming to Modern C, usually we are a gamedev, so we cannot avoid math programming (also SIMD). C have well support SIMD through compiler extensions. But it lack of operators overloading. We have to use Clang extensions or compile C code as C++ (may miss main features like designated initialization). Someones sticks to operator-like function (ex: vec2_add). And inline function sometime maybe not inlined (doesnot have the same behaviours through compilers). BeefLang so this problem well (creator is a variant in gamedev, PopCap Games Founder). SIMD is a work as compiler-level, the compiler will choose good fit intrintics for the operations, the programmer no need to know hundreds intrinsics to the job for multi platforms (maybe not the best performance, but it save programming time with good performance).
+Coming to Modern C, usually we are a gamedev, so we cannot avoid math programming (also SIMD). C have well support SIMD through compiler extensions. But it lack of operators overloading. We have to use Clang extensions or compile C code as C++ (may miss main features like designated initialization). Someones sticks to operator-like function (ex: vec2_add). And inline function sometime maybe not inlined (doesnot have the same behaviours through compilers). BeefLang so this problem well (creator is a veteraan in gamedev, PopCap Games Founder). SIMD is a work as compiler-level, the compiler will choose good fit intrintics for the operations, the programmer no need to know hundreds intrinsics to the job for multi platforms (maybe not the best performance, but it save programming time with good performance).
 
 > **_NOTE:_** 
 > 1. You should use the nightly build to get best support of SIMD, older version may crash the IDE when compiling.
