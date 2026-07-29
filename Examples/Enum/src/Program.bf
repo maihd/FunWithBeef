@@ -15,11 +15,21 @@ class Program
         Sunday
     }
 
+
+	enum Flags : uint
+	{
+		None	= 0,
+		One		= 1 << 0,
+		Two		= 1 << 1,
+	}
+
+
     enum TaggedUnion
     {
         case Int(int);
         case UInt(uint);
     }
+
 
 	[CRepr]
 	enum CReprTaggedUnion
@@ -27,6 +37,7 @@ class Program
 		case Int(int);
 		case UInt(uint);
 	}
+
 
     static void Main()
     {
@@ -45,6 +56,22 @@ class Program
 		Console.WriteLine("{0} = {1}", jsonObject.TypeName(), jsonObject.ToString(.. scope String(1024)));
 
         Console.WriteLine("");
+
+		// Enum as bitset
+
+		var flags = Flags.None;
+		flags |= .One;
+		flags |= .Two;
+		if (flags.HasFlag(.One))
+		{
+			Console.WriteLine("flags have .One");
+		}
+		if (flags.HasFlag(.Two))
+		{
+			Console.WriteLine("flags have .Two");
+		}
+
+		Console.WriteLine("");
 
         // Reverse engineering tagged union enum
 
@@ -122,11 +149,13 @@ class Program
         }
 
         // Pattern matching
-        if (taggedUnion case .Int(let i)) {
+        if (taggedUnion case .Int(let i))
+		{
             Console.WriteLine("TaggedUnion.Int value: {}", i);
         }
 
-        if (taggedUnion case .UInt(let u)) {
+        if (taggedUnion case .UInt(let u))
+		{
             Console.WriteLine("TaggedUnion.UInt value: {}", u);
         }
 
@@ -167,7 +196,8 @@ class Program
         }
 
         // No switch expression
-        /*var x = taggedUnion switch {
+        /*var x = taggedUnion switch
+		{
             .Int(let v) => v,
             _ => 0
         };*/
