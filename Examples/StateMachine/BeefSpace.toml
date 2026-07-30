@@ -1,0 +1,7 @@
+FileVersion = 1
+
+[Workspace]
+StartupProject = "StateMachine"
+
+[Projects]
+StateMachine = {Path = "."}
